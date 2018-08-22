@@ -1,3 +1,5 @@
+package entity;
+
 public class User
 {
     private long id;
@@ -29,8 +31,8 @@ public class User
     @Override
     public String toString()
     {
-        return "User ID: " + this.id +
-                "Login: " + this.login +
+        return "User ID: " + this.id + " | " +
+                "Login: " + this.login + " | " +
                 "Password :" + this.password;
     }
 }
