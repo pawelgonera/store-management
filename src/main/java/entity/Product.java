@@ -62,11 +62,11 @@ public class Product
     @Override
     public String toString()
     {
-        return "Product ID: " + this.id +
-                "Product Name: " + this.productName +
-                "Product Price: " + this.price +
-                "Product Weight: " + this.weight +
-                "Product Color: " + this.color +
+        return "Product ID: " + this.id + " | " +
+                "Product Name: " + this.productName + " | " +
+                "Product Price: " + this.price + " | " +
+                "Product Weight: " + this.weight + " | " +
+                "Product Color: " + this.color + " | " +
                 "Product Count: " + this.productCount;
     }
 }

@@ -39,36 +39,12 @@ public class UserServiceImpl implements UserService
     @Override
     public void removeUserById(Long id)
     {
-        //Iterator<User> iter = users.iterator();
-       /* while(iter.hasNext())
+        for(int i = 0; i<users.size(); i++)
         {
-            User user = iter.next();
+            User user = users.get(i);
             if (user.getId() == id)
-                iter.remove();
-        }*/
-
-        /*for(int i=0;i<users.size();i++)
-        {
-
-            User userFromList = users.get(i);
-
-            if (userFromList.getId() == id)
-            {
-
                 users.remove(i);
-
-                break;
-            }
-        }*/
-
-        for(User user : users)
-        {
-            if(user.getId() == id)
-            {
-                users.remove(user);
-                break;
-            }
-
         }
+
     }
 }

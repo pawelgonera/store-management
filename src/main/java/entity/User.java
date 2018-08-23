@@ -33,6 +33,6 @@ public class User
     {
         return "User ID: " + this.id + " | " +
                 "Login: " + this.login + " | " +
-                "Password :" + this.password;
+                "Password :" + this.password ;
     }
 }
