@@ -3,6 +3,7 @@ package dao;
 import api.ProductDao;
 import entity.Product;
 import entity.parser.ProductParser;
+import utils.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,14 +11,15 @@ import java.util.List;
 
 public class ProductDaoImpl implements ProductDao
 {
-    File file;
+    String fileName;
     String productType;
 
-    public ProductDaoImpl(String fileName, String productType)
+    public ProductDaoImpl(String fileName, String productType) throws IOException
 
     {
-        this.file = new File(fileName + ".txt");
+        this.fileName = fileName + ".txt";
         this.productType = productType;
+        FileUtils.createNewFile(fileName + ".txt");
     }
 
     @Override
@@ -33,7 +35,7 @@ public class ProductDaoImpl implements ProductDao
     @Override
     public void saveProducts(List<Product> products) throws IOException
     {
-        BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(file, false)));
+        BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(fileName, false)));
 
         for(Product product : products)
         {
@@ -78,7 +80,7 @@ public class ProductDaoImpl implements ProductDao
     {
         List<Product> products = new ArrayList<Product>();
 
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
         String readLine;
 

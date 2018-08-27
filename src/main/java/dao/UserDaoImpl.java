@@ -3,6 +3,7 @@ package dao;
 import api.UserDao;
 import entity.User;
 import entity.parser.UserParser;
+import utils.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,11 +11,12 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao
 {
-    File file;
+    String fileName;
 
-    public UserDaoImpl (String file)
+    public UserDaoImpl (String fileName) throws IOException
     {
-        this.file = new File(file + ".txt");
+        this.fileName = fileName + ".txt";
+        FileUtils.createNewFile(fileName + ".txt");
     }
 
     @Override
@@ -31,7 +33,7 @@ public class UserDaoImpl implements UserDao
     @Override
     public void saveUsers(List<User> users) throws IOException
     {
-        BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(file, false)));
+        BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(fileName, false)));
 
         for(User user : users)
         {
@@ -74,7 +76,7 @@ public class UserDaoImpl implements UserDao
     public List<User> getAllUsers() throws IOException
     {
         List<User> users = new ArrayList<User>();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
         String readLine;
         while((readLine = reader.readLine()) != null)
