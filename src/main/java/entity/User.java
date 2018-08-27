@@ -31,8 +31,8 @@ public class User
     @Override
     public String toString()
     {
-        return "User ID: " + this.id + " | " +
-                "Login: " + this.login + " | " +
-                "Password :" + this.password ;
+        return this.id + "-" +
+                this.login + "-" +
+                this.password ;
     }
 }

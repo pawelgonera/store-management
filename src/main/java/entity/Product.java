@@ -60,13 +60,30 @@ public class Product
     }
 
     @Override
+    public int hashCode()
+    {
+        int hash = 7;
+
+        hash = 31 * hash + (int) id;
+        hash = 31 * hash + (productName == null ? 0 : productName.hashCode());
+        hash = 31 * hash + (int) price;
+        hash = 31 * hash + (int) weight;
+        hash = 31 * hash + (color == null ? 0 : color.hashCode());
+        hash = 31 * hash + (int) productCount;
+
+        return hash;
+    }
+
+
+
+    @Override
     public String toString()
     {
-        return "Product ID: " + this.id + " | " +
-                "Product Name: " + this.productName + " | " +
-                "Product Price: " + this.price + " | " +
-                "Product Weight: " + this.weight + " | " +
-                "Product Color: " + this.color + " | " +
-                "Product Count: " + this.productCount;
+        return  this.id + "-" +
+                this.productName + "-" +
+                this.price + "-" +
+                this.weight + "-" +
+                this.color + "-" +
+                this.productCount;
     }
 }
