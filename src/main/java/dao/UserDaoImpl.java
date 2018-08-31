@@ -4,7 +4,6 @@ import api.UserDao;
 import entity.User;
 import entity.parser.UserParser;
 import utils.FileUtils;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;

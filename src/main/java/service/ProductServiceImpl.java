@@ -4,18 +4,19 @@ import api.ProductDao;
 import api.ProductService;
 import dao.ProductDaoImpl;
 import entity.Product;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService
 {
-    //List<Product> products;
     private static ProductServiceImpl instance = null;
 
     ProductDao productDao = new ProductDaoImpl("products", "PRODUCT");
 
+    public ProductServiceImpl() throws IOException
+    {
+
+    }
 
     public static ProductServiceImpl getInstance() throws IOException
     {
@@ -23,16 +24,6 @@ public class ProductServiceImpl implements ProductService
             instance = new ProductServiceImpl();
 
         return instance;
-    }
-
-    public ProductServiceImpl() throws IOException
-    {
-
-    }
-
-    public ProductServiceImpl(List<Product> products) throws IOException
-    {
-        //List<Product> products = products;
     }
 
     @Override

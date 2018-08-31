@@ -4,7 +4,6 @@ import api.ProductDao;
 import entity.Product;
 import entity.parser.ProductParser;
 import utils.FileUtils;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;

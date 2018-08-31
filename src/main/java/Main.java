@@ -46,7 +46,17 @@ public class Main
         ProductServiceImpl productService = new ProductServiceImpl();
 
 
+        UserServiceImpl userService = UserServiceImpl.getInstance();
 
+        try {
+            userService.addUser(new User(4L, "BigTom", "Benek128"));
+        } catch (UserShortLengthPasswordException e) {
+            e.printStackTrace();
+        } catch (UserLoginAlreadyExistException e) {
+            e.printStackTrace();
+        } catch (UserShortLengthLoginException e) {
+            e.printStackTrace();
+        }
 
         /*
         UserValidator userValidator = UserValidator.getInstance();

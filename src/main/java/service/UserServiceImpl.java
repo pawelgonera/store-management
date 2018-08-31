@@ -8,29 +8,28 @@ import exception.UserLoginAlreadyExistException;
 import exception.UserShortLengthLoginException;
 import exception.UserShortLengthPasswordException;
 import validator.UserValidator;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
 public class UserServiceImpl implements UserService
 {
-    //List <User> users;
+    private static UserServiceImpl instance = null;
 
     UserDao userDao = UserDaoImpl.getInstance();
     UserValidator userValidator = UserValidator.getInstance();
 
     public UserServiceImpl()
-
     {
-       // this.users = new ArrayList<User>();
+
     }
 
-    public UserServiceImpl(List <User> users)
+    public static UserServiceImpl getInstance()
     {
-        //this.users = users;
+        if(instance == null)
+            instance = new UserServiceImpl();
+
+        return instance;
     }
 
     @Override
