@@ -11,12 +11,28 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao
 {
-    String fileName;
+    static final String fileName = "users.txt";
 
-    public UserDaoImpl (String fileName) throws IOException
+    private static UserDaoImpl instance = null;
+
+    public UserDaoImpl (String fileName)
     {
-        this.fileName = fileName + ".txt";
-        FileUtils.createNewFile(fileName + ".txt");
+        try
+        {
+            FileUtils.createNewFile(fileName);
+
+        }catch (IOException e)
+        {
+            System.out.println("Error with creating new file");
+        }
+    }
+
+    public static UserDaoImpl getInstance()
+    {
+        if(instance == null)
+            instance = new UserDaoImpl(fileName);
+
+        return instance;
     }
 
     @Override
@@ -33,8 +49,8 @@ public class UserDaoImpl implements UserDao
     @Override
     public void saveUsers(List<User> users) throws IOException
     {
-        BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(fileName, false)));
-
+        BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(fileName, true)));
+        FileUtils.clearFiler(fileName);
         for(User user : users)
         {
             writer.write(user.toString());
@@ -119,4 +135,5 @@ public class UserDaoImpl implements UserDao
 
         return null;
     }
+
 }

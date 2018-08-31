@@ -14,6 +14,7 @@ public class ProductDaoImpl implements ProductDao
     String fileName;
     String productType;
 
+
     public ProductDaoImpl(String fileName, String productType) throws IOException
 
     {
@@ -21,6 +22,8 @@ public class ProductDaoImpl implements ProductDao
         this.productType = productType;
         FileUtils.createNewFile(fileName + ".txt");
     }
+
+
 
     @Override
     public void saveProduct(Product product) throws IOException
