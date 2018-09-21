@@ -10,11 +10,11 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao
 {
-    static final String fileName = "users.txt";
+    private static final String fileName = "users.txt";
 
     private static UserDaoImpl instance = null;
 
-    public UserDaoImpl (String fileName)
+    public UserDaoImpl(String fileName)
     {
         try
         {

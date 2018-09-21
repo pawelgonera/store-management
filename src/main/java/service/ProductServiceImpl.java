@@ -11,7 +11,7 @@ public class ProductServiceImpl implements ProductService
 {
     private static ProductServiceImpl instance = null;
 
-    ProductDao productDao = new ProductDaoImpl("products", "PRODUCT");
+    private ProductDao productDao = ProductDaoImpl.getInstance();
 
     public ProductServiceImpl() throws IOException
     {
@@ -25,6 +25,7 @@ public class ProductServiceImpl implements ProductService
 
         return instance;
     }
+
 
     @Override
     public List<Product> getAllProducts() throws IOException

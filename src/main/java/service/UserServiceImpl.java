@@ -16,8 +16,8 @@ public class UserServiceImpl implements UserService
 {
     private static UserServiceImpl instance = null;
 
-    UserDao userDao = UserDaoImpl.getInstance();
-    UserValidator userValidator = UserValidator.getInstance();
+    private UserDao userDao = UserDaoImpl.getInstance();
+    private UserValidator userValidator = UserValidator.getInstance();
 
     public UserServiceImpl()
     {
@@ -39,10 +39,25 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public void addUser(User user) throws UserShortLengthPasswordException, UserLoginAlreadyExistException, UserShortLengthLoginException, IOException
+    public boolean addUser(User user) throws UserShortLengthPasswordException, UserLoginAlreadyExistException, UserShortLengthLoginException, IOException
     {
         if(userValidator.isValidate(user))
+        {
             userDao.saveUser(user);
+            return  true;
+        }
+
+        return false;
+    }
+
+    public boolean isCorrectLoginAndPassowrd(String login, String password) throws IOException
+    {
+        User user = userDao.getUserByLogin(login);
+
+        if(user.getLogin().equals(login) && user.getPassword().equals(password))
+            return true;
+        else
+            return false;
     }
 
     @Override

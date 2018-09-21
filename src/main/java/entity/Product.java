@@ -2,6 +2,7 @@ package entity;
 
 public class Product
 {
+    private static final String PRODUCT_TYPE = "P";
     private long id;
     private String productName;
     private float price;
@@ -74,10 +75,7 @@ public class Product
         return hash;
     }
 
-
-
-    @Override
-    public String toString()
+    public String standardToString()
     {
         return  this.id + "-" +
                 this.productName + "-" +
@@ -85,5 +83,13 @@ public class Product
                 this.weight + "-" +
                 this.color + "-" +
                 this.productCount;
+    }
+
+    @Override
+    public String toString()
+    {
+        return  PRODUCT_TYPE + "-" +
+                standardToString();
+
     }
 }

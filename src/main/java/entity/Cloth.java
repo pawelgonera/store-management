@@ -4,6 +4,7 @@ import entity.Product;
 
 public class Cloth extends Product
 {
+    private static final String PRODUCT_TYPE = "C";
     private String size;
     private String material;
 
@@ -27,7 +28,9 @@ public class Cloth extends Product
     @Override
     public String toString()
     {
-        return "Cloth Size: " + this.size +
-                "Cloth material: " + this.material;
+        return  PRODUCT_TYPE + "-" +
+                standardToString() + "-" +
+                this.size + "-" +
+                this.material;
     }
 }

@@ -3,35 +3,52 @@ package dao;
 import api.ProductDao;
 import entity.Product;
 import entity.parser.ProductParser;
+import exception.ProductCountNegativeException;
+import exception.ProductNameEmptyException;
+import exception.ProductPriceNoPositiveException;
+import exception.ProductWeightNoPositiveException;
 import utils.FileUtils;
+import validator.ProductValidator;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDaoImpl implements ProductDao
 {
-    String fileName;
-    String productType;
+    private String fileName = "products.txt";
+    private static ProductDaoImpl instance = null;
+    private ProductValidator productValidator = ProductValidator.getInstance();
 
-
-    public ProductDaoImpl(String fileName, String productType) throws IOException
-
-    {
-        this.fileName = fileName + ".txt";
-        this.productType = productType;
-        FileUtils.createNewFile(fileName + ".txt");
+    public ProductDaoImpl() throws IOException {
+        try
+        {
+            FileUtils.createNewFile(fileName);
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
+    public static ProductDaoImpl getInstance() throws IOException
+    {
+        if(instance == null)
+            instance = new ProductDaoImpl();
 
+        return instance;
+    }
 
     @Override
-    public void saveProduct(Product product) throws IOException
+    public void saveProduct(Product product) throws IOException, ProductPriceNoPositiveException, ProductNameEmptyException, ProductCountNegativeException, ProductWeightNoPositiveException
     {
        List<Product> products = getAllProducts();
 
-       products.add(product);
+       if(productValidator.isValidate(product))
+       {
+           products.add(product);
 
-       saveProducts(products);
+           saveProducts(products);
+       }
     }
 
     @Override
@@ -64,7 +81,7 @@ public class ProductDaoImpl implements ProductDao
     }
 
     @Override
-    public void removePRoductByName(String productName) throws IOException
+    public void removeProductByName(String productName) throws IOException
     {
         List<Product> products = getAllProducts();
 
@@ -88,7 +105,7 @@ public class ProductDaoImpl implements ProductDao
 
         while((readLine = reader.readLine()) != null)
         {
-            Product product = ProductParser.convertProduct(readLine, productType);
+            Product product = ProductParser.convertProduct(readLine);
             if(product != null)
                 products.add(product);
         }

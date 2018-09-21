@@ -6,17 +6,19 @@ import entity.Product;
 
 public class ProductParser
 {
-    public static Product convertProduct(String strProduct, String productType)
+    public static Product convertProduct(String strProduct)
     {
-        if(productType.equals("PRODUCT"))
+        char productType = strProduct.charAt(0);
+
+        if(productType == 'P')
         {
             return parseProduct(strProduct);
         }
-        else if(productType.equals(("BOOTS")))
+        else if(productType == 'B')
         {
             return parseBoots(strProduct);
         }
-        else if(productType.equals("CLOTH"))
+        else if(productType == 'C')
         {
             return parseCloth(strProduct);
         }
@@ -26,32 +28,34 @@ public class ProductParser
 
     public static Product parseBoots(String strProduct)
     {
-        String[] productInfos = strProduct.split("#");
+        String[] productInfos = strProduct.split("-");
 
-        Long id = Long.parseLong(productInfos[0]);
-        String productName = productInfos[1];
-        Float price = Float.parseFloat(productInfos[2]);
-        Float weight = Float.parseFloat(productInfos[3]);
-        String color = productInfos[4];
-        Integer productCount = Integer.parseInt(productInfos[5]);
-        Integer size = Integer.parseInt(productInfos[6]);
-        Boolean isNaturalSkin = Boolean.parseBoolean(productInfos[7]);
+        String productType = productInfos[0];
+        Long id = Long.parseLong(productInfos[1]);
+        String productName = productInfos[2];
+        Float price = Float.parseFloat(productInfos[3]);
+        Float weight = Float.parseFloat(productInfos[4]);
+        String color = productInfos[5];
+        Integer productCount = Integer.parseInt(productInfos[6]);
+        Integer size = Integer.parseInt(productInfos[7]);
+        Boolean isNaturalSkin = Boolean.parseBoolean(productInfos[8]);
 
         return new Boots(id, productName, price, weight, color, productCount, size, isNaturalSkin);
     }
 
     private static Product parseCloth(String strProduct)
     {
-        String[] productInfos = strProduct.split("#");
+        String[] productInfos = strProduct.split("-");
 
-        Long id = Long.parseLong(productInfos[0]);
-        String productName = productInfos[1];
-        Float price = Float.parseFloat(productInfos[2]);
-        Float weight = Float.parseFloat(productInfos[3]);
-        String color = productInfos[4];
-        Integer productCount = Integer.parseInt(productInfos[5]);
-        String size = productInfos[6];
-        String material = productInfos[7];
+        String productType = productInfos[0];
+        Long id = Long.parseLong(productInfos[1]);
+        String productName = productInfos[2];
+        Float price = Float.parseFloat(productInfos[3]);
+        Float weight = Float.parseFloat(productInfos[4]);
+        String color = productInfos[5];
+        Integer productCount = Integer.parseInt(productInfos[6]);
+        String size = productInfos[7];
+        String material = productInfos[8];
 
         return new Cloth(id, productName, price, weight, color, productCount, size, material);
     }
@@ -60,12 +64,13 @@ public class ProductParser
     {
         String[] productInfos = strProduct.split("-");
 
-        Long id = Long.parseLong(productInfos[0]);
-        String productName = productInfos[1];
-        Float price = Float.parseFloat(productInfos[2]);
-        Float weight = Float.parseFloat(productInfos[3]);
-        String color = productInfos[4];
-        Integer productCount = Integer.parseInt(productInfos[5]);
+        String productType = productInfos[0];
+        Long id = Long.parseLong(productInfos[1]);
+        String productName = productInfos[2];
+        Float price = Float.parseFloat(productInfos[3]);
+        Float weight = Float.parseFloat(productInfos[4]);
+        String color = productInfos[5];
+        Integer productCount = Integer.parseInt(productInfos[6]);
 
         return new Product(id, productName, price, weight, color, productCount);
     }
