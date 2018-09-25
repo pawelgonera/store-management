@@ -5,8 +5,6 @@ import api.UserService;
 import dao.UserDaoImpl;
 import entity.User;
 import exception.UserLoginAlreadyExistException;
-import exception.UserShortLengthLoginException;
-import exception.UserShortLengthPasswordException;
 import validator.UserValidator;
 import java.io.IOException;
 import java.util.List;
@@ -39,39 +37,88 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public boolean addUser(User user) throws UserShortLengthPasswordException, UserLoginAlreadyExistException, UserShortLengthLoginException, IOException
+    public boolean addUser(User user)
     {
-        if(userValidator.isValidate(user))
+        try
         {
-            userDao.saveUser(user);
-            return  true;
+            if(isLoginAlreadyExist(user.getLogin()))
+            {
+                throw  new UserLoginAlreadyExistException();
+            }
+
+            if(userValidator.isValidate(user))
+            {
+                userDao.saveUser(user);
+                return true;
+            }
+
         }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
 
         return false;
     }
 
-    public boolean isCorrectLoginAndPassowrd(String login, String password) throws IOException
+    private boolean isLoginAlreadyExist(String login) throws IOException
     {
-        User user = userDao.getUserByLogin(login);
+        User user = getUserByLogin(login);
 
-        if(user.getLogin().equals(login) && user.getPassword().equals(password))
-            return true;
-        else
-            return false;
+        return user != null;
     }
 
     @Override
     public void removeUserById(Long id) throws IOException
     {
+        userDao.removeUserById(id);
+    }
+
+    @Override
+    public User getUserById(Long id) throws IOException
+    {
         List<User> users = getAllUsers();
-        for(int i = 0; i<users.size(); i++)
+
+        for(User user : users)
         {
-            User user = users.get(i);
-            if (user.getId() == id)
-                users.remove(i);
+            if(user.getId() == id)
+                return user;
         }
 
-        userDao.saveUsers(users);
+        return null;
+    }
 
+    @Override
+    public User getUserByLogin(String login) throws IOException
+    {
+        List<User> users = getAllUsers();
+
+        for(User user : users)
+        {
+            if(user.getLogin().equals(login))
+                return user;
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean isCorrectLoginAndPassowrd(String login, String password)
+    {
+        User user = null;
+        try
+        {
+            user = getUserByLogin(login);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        if(user.getLogin().equals(login) && user.getPassword().equals(password))
+            return true;
+        else
+            return false;
     }
 }

@@ -3,7 +3,6 @@ import entity.Boots;
 import entity.Cloth;
 import entity.Product;
 import entity.User;
-import exception.*;
 import service.ProductServiceImpl;
 import service.UserRegisterLoginFacadeImpl;
 import service.UserServiceImpl;
@@ -77,20 +76,9 @@ public class Main
                     if(!users.isEmpty())
                         userId = users.get(users.size()-1).getId();
                     userId++;
-                    try
-                    {
                         userRegister.registerLogin(new User(userId, login, password));
 
-                    } catch (UserLoginAlreadyExistException e)
-                    {
-                        e.printStackTrace();
-                    } catch (UserShortLengthPasswordException e)
-                    {
-                        e.printStackTrace();
-                    } catch (UserShortLengthLoginException e)
-                    {
-                        e.printStackTrace();
-                    }
+
                     break;
 
 
@@ -161,15 +149,8 @@ public class Main
                     {
                         productDao.saveProduct(boots);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ProductPriceNoPositiveException e) {
-                        e.printStackTrace();
-                    } catch (ProductNameEmptyException e) {
-                        e.printStackTrace();
-                    } catch (ProductCountNegativeException e) {
-                        e.printStackTrace();
-                    } catch (ProductWeightNoPositiveException e) {
+                    } catch (IOException e)
+                    {
                         e.printStackTrace();
                     }
                     break;
@@ -196,15 +177,8 @@ public class Main
                     {
                         productDao.saveProduct(cloth);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ProductPriceNoPositiveException e) {
-                        e.printStackTrace();
-                    } catch (ProductNameEmptyException e) {
-                        e.printStackTrace();
-                    } catch (ProductCountNegativeException e) {
-                        e.printStackTrace();
-                    } catch (ProductWeightNoPositiveException e) {
+                    } catch (IOException e)
+                    {
                         e.printStackTrace();
                     }
                     break;
@@ -227,15 +201,8 @@ public class Main
                     {
                         productDao.saveProduct(product);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ProductPriceNoPositiveException e) {
-                        e.printStackTrace();
-                    } catch (ProductNameEmptyException e) {
-                        e.printStackTrace();
-                    } catch (ProductCountNegativeException e) {
-                        e.printStackTrace();
-                    } catch (ProductWeightNoPositiveException e) {
+                    } catch (IOException e)
+                    {
                         e.printStackTrace();
                     }
                     break;
@@ -257,6 +224,4 @@ public class Main
         System.out.println("Podaj ilość produktów");
         productCount = sc.nextInt();
     }
-
-
 }

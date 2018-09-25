@@ -16,6 +16,7 @@ public class UserValidator
 
     UserDaoImpl userDao = UserDaoImpl.getInstance();
 
+
     public UserValidator()
     {
 
@@ -40,7 +41,7 @@ public class UserValidator
         {
             throw new UserShortLengthPasswordException("Password " + user.getPassword() + " is to short");
         }
-        if(isUserByLoginExist(user.getLogin()))
+        if(!isUserByLoginExist(user.getLogin()))
         {
             throw new UserLoginAlreadyExistException("Login " + user.getLogin() + " is already exist!");
         }

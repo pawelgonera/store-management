@@ -1,24 +1,21 @@
 package service;
 
-import dao.UserRegisterLoginFacade;
+import api.UserRegisterLoginFacade;
 import entity.User;
-import exception.UserLoginAlreadyExistException;
-import exception.UserShortLengthLoginException;
-import exception.UserShortLengthPasswordException;
 
 import java.io.IOException;
 
 public class UserRegisterLoginFacadeImpl implements UserRegisterLoginFacade
 {
     private static UserRegisterLoginFacadeImpl instance = null;
-    private UserServiceImpl userService;
+    private UserServiceImpl userService = UserServiceImpl.getInstance();
 
-    public UserRegisterLoginFacadeImpl() throws IOException
+    public UserRegisterLoginFacadeImpl()
     {
         userService = new UserServiceImpl();
     }
 
-    public static UserRegisterLoginFacadeImpl getInstance() throws IOException
+    public static UserRegisterLoginFacadeImpl getInstance()
     {
         if(instance == null)
             instance = new UserRegisterLoginFacadeImpl();
@@ -27,13 +24,13 @@ public class UserRegisterLoginFacadeImpl implements UserRegisterLoginFacade
     }
 
     @Override
-    public boolean registerLogin(User user) throws UserLoginAlreadyExistException, UserShortLengthPasswordException, UserShortLengthLoginException, IOException
+    public boolean registerLogin(User user)
     {
         return userService.addUser(user);
     }
 
     @Override
-    public boolean loginUser(String login, String password) throws IOException
+    public boolean loginUser(String login, String password)
     {
         return userService.isCorrectLoginAndPassowrd(login, password);
     }

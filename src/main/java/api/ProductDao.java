@@ -1,17 +1,12 @@
 package api;
 
 import entity.Product;
-import exception.ProductCountNegativeException;
-import exception.ProductNameEmptyException;
-import exception.ProductPriceNoPositiveException;
-import exception.ProductWeightNoPositiveException;
-
 import java.io.IOException;
 import java.util.List;
 
 public interface ProductDao
 {
-    void saveProduct(Product product) throws IOException, ProductPriceNoPositiveException, ProductNameEmptyException, ProductCountNegativeException, ProductWeightNoPositiveException;
+    void saveProduct(Product product) throws IOException;
 
     void saveProducts(List<Product> products) throws IOException;
 
@@ -21,7 +16,4 @@ public interface ProductDao
 
     List<Product> getAllProducts() throws IOException;
 
-    Product getProductById(Long productId) throws IOException;
-
-    Product getProductByName(String productName) throws IOException;
 }

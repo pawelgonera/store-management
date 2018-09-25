@@ -11,11 +11,15 @@ public interface ProductService
 
     Integer getProductCountOnList() throws IOException;
 
+    boolean isProductOnWarehouse(String productName);
+
+    boolean isProductExist(String productName);
+
+    boolean isProductExist(Long productId);
+
+    boolean saveProduct(Product product);
+
+    Product getProductById(Long productId) throws IOException;
+
     Product getProductByName(String productName) throws IOException;
-
-    boolean isProductOnWarehouse(String productName) throws IOException;
-
-    boolean isProductExistByName(String productName) throws IOException;
-
-    boolean isProductExistById(Long id) throws IOException;
 }

@@ -39,30 +39,37 @@ public class ProductDaoImpl implements ProductDao
     }
 
     @Override
-    public void saveProduct(Product product) throws IOException, ProductPriceNoPositiveException, ProductNameEmptyException, ProductCountNegativeException, ProductWeightNoPositiveException
+    public void saveProduct(Product product) throws IOException
     {
        List<Product> products = getAllProducts();
 
-       if(productValidator.isValidate(product))
+       try
        {
-           products.add(product);
+           if (productValidator.isValidate(product)) {
+               products.add(product);
 
-           saveProducts(products);
+               saveProducts(products);
+           }
+       }
+       catch (Exception e)
+       {
+           System.out.println(e.getMessage());
        }
     }
 
     @Override
     public void saveProducts(List<Product> products) throws IOException
     {
+        FileUtils.clearFiler(fileName);
         BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(fileName, false)));
 
-        for(Product product : products)
-        {
+        for (Product product : products) {
             writer.write(product.toString());
             writer.newLine();
         }
 
         writer.close();
+
     }
 
     @Override
@@ -70,14 +77,13 @@ public class ProductDaoImpl implements ProductDao
     {
         List<Product> products = getAllProducts();
 
-        for(int i = 0; i<products.size(); i++)
+        for (int i = 0; i < products.size(); i++)
         {
-            if(products.get(i).getId() == productId)
+            if (products.get(i).getId() == productId)
                 products.remove(i);
         }
 
         saveProducts(products);
-
     }
 
     @Override
@@ -114,34 +120,5 @@ public class ProductDaoImpl implements ProductDao
 
         return products;
     }
-
-    @Override
-    public Product getProductById(Long productId) throws IOException
-    {
-        List<Product> products = getAllProducts();
-
-        for(int i = 0; i<products.size(); i++)
-        {
-            if(products.get(i).getId() == productId)
-                return products.get(i);
-        }
-
-        return null;
-    }
-
-    @Override
-    public Product getProductByName(String productName) throws IOException
-    {
-        List<Product> products = getAllProducts();
-
-        for(int i = 0; i<products.size(); i++)
-        {
-            if(products.get(i).getProductName().equals(productName))
-                return products.get(i);
-        }
-
-        return null;
-    }
-
 
 }

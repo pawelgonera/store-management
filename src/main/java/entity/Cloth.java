@@ -1,6 +1,5 @@
 package entity;
 
-import entity.Product;
 
 public class Cloth extends Product
 {

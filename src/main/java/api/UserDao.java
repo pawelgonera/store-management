@@ -8,18 +8,14 @@ import java.util.List;
 
 public interface UserDao
 {
-    public void saveUser(User user) throws IOException;
+    void saveUser(User user) throws IOException;
 
-    public void saveUsers(List<User> users) throws IOException;
+    void saveUsers(List<User> users) throws IOException;
 
-    public void removeUserById(Long id) throws IOException;
+    void removeUserById(Long id) throws IOException;
 
-    public void removeUserByLogin(String login) throws IOException;
+    void removeUserByLogin(String login) throws IOException;
 
-    public List<User> getAllUsers() throws IOException;
-
-    public User getUserById(Long id) throws IOException;
-
-    public User getUserByLogin (String login) throws IOException;
+    List<User> getAllUsers() throws IOException;
 
 }

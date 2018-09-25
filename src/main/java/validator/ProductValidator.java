@@ -1,6 +1,5 @@
 package validator;
 
-import dao.ProductDaoImpl;
 import entity.Product;
 import exception.ProductCountNegativeException;
 import exception.ProductNameEmptyException;
@@ -8,7 +7,7 @@ import exception.ProductPriceNoPositiveException;
 import exception.ProductWeightNoPositiveException;
 
 import java.io.IOException;
-import java.util.List;
+
 
 public class ProductValidator
 {
@@ -68,7 +67,7 @@ public class ProductValidator
 
     private boolean isProductNameEmpty(String productName)
     {
-        if(productName != null && (!productName.equals("")))
+        if(productName != null && !(productName.length() == 0))
             return true;
         else
             return false;
