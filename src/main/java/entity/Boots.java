@@ -1,16 +1,20 @@
 package entity;
 
+import entity.enums.Colors;
+import entity.enums.ProductSeparators;
+import entity.enums.SkinType;
+
+
 public class Boots extends Product
 {
-    private static final String PRODUCT_TYPE = "B";
     private int size;
-    private boolean isNaturalSkin;
+    private SkinType skinType;
 
-    public Boots(long id, String productName, float price, float weight, String color, int productCount, int size, boolean isNaturalSkin)
+    public Boots(long id, String productName, float price, float weight, Colors color, int productCount, int size, SkinType skinType)
     {
         super(id, productName, price, weight, color, productCount);
         this.size = size;
-        this.isNaturalSkin = isNaturalSkin;
+        this.skinType = skinType;
     }
 
     public int getSize()
@@ -18,17 +22,18 @@ public class Boots extends Product
         return size;
     }
 
-    public boolean isNaturalSkin()
+    public SkinType isNaturalSkin()
+
     {
-        return isNaturalSkin;
+        return skinType;
     }
 
     @Override
     public String toString()
     {
-        return  PRODUCT_TYPE + "-" +
-                standardToString() + "-" +
-                this.size + "-" +
-                this.isNaturalSkin;
+        return  ProductSeparators.BOOTS_ID.toString() + ProductSeparators.PRODUCT_SEPARATOR +
+                standardToString() + ProductSeparators.PRODUCT_SEPARATOR+
+                this.size + ProductSeparators.PRODUCT_SEPARATOR +
+                this.skinType.toString();
     }
 }

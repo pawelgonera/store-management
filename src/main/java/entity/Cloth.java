@@ -1,25 +1,28 @@
 package entity;
 
 
+import entity.enums.Colors;
+import entity.enums.Material;
+import entity.enums.ProductSeparators;
+
 public class Cloth extends Product
 {
-    private static final String PRODUCT_TYPE = "C";
-    private String size;
-    private String material;
+    private int size;
+    private Material material;
 
-    public Cloth(long id, String productName, float price, float weight, String color, int productCount, String size, String material)
+    public Cloth(long id, String productName, float price, float weight, Colors color, int productCount, int size, Material material)
     {
         super(id, productName, price, weight, color, productCount);
         this.size = size;
         this.material = material;
     }
 
-    public String getSize()
+    public int getSize()
     {
         return size;
     }
 
-    public String getMaterial()
+    public Material getMaterial()
     {
         return material;
     }
@@ -27,9 +30,9 @@ public class Cloth extends Product
     @Override
     public String toString()
     {
-        return  PRODUCT_TYPE + "-" +
-                standardToString() + "-" +
-                this.size + "-" +
-                this.material;
+        return  ProductSeparators.CLOTH_ID.toString() + ProductSeparators.PRODUCT_SEPARATOR +
+                standardToString() + ProductSeparators.PRODUCT_SEPARATOR +
+                this.size + ProductSeparators.PRODUCT_SEPARATOR +
+                this.material.toString();
     }
 }

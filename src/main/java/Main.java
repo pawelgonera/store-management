@@ -3,6 +3,12 @@ import entity.Boots;
 import entity.Cloth;
 import entity.Product;
 import entity.User;
+import entity.enums.Colors;
+import entity.enums.Material;
+import entity.enums.SkinType;
+import entity.parser.ColorParser;
+import entity.parser.MaterialParser;
+import entity.parser.SkinTypeParser;
 import service.ProductServiceImpl;
 import service.UserRegisterLoginFacadeImpl;
 import service.UserServiceImpl;
@@ -18,7 +24,10 @@ public class Main
     private static Scanner sc = new Scanner(System.in);
     private static int choose = 0, productCount, size;
     private static boolean isNaturalSkin;
-    private static String login, password, productName, color, clothSize, material;
+    private static String login, password, productName;
+    private static Colors colors;
+    private static Material materials;
+    private static SkinType skinTypes;
     private static float price, weight;
     private static List<Boots> boots = new ArrayList<Boots>();
     private static long userId = 0, productId = 0;
@@ -49,6 +58,11 @@ public class Main
     public static void main(String [] args) throws IOException
     {
         UserRegisterLoginFacadeImpl userRegister = UserRegisterLoginFacadeImpl.getInstance();
+
+
+        //System.out.println(productDao.getAllProducts());
+
+        System.out.println(Material.LEATHER);
 
         do
         {
@@ -128,8 +142,9 @@ public class Main
                     Main.getProductData();
                     System.out.println("Podaj rozmiar butów");
                     size = sc.nextInt();
-                    System.out.println("Czy buty sa ze skóry? (true or false");
-                    isNaturalSkin = sc.nextBoolean();
+                    System.out.println("Podaj rodzaj materiału (Skóra czy tworzywo sztuczne, wybierz: NATURAL or ARTIFICIAL)");
+                    String skinType = sc.next();
+                    SkinType skinTypes = SkinTypeParser.getSkinType(skinType);
                     try
                     {
                         List<Product> products = productService.getAllProducts();
@@ -144,7 +159,7 @@ public class Main
                     }
                     productId++;
 
-                    Boots boots = new Boots(productId, productName, price, weight, color, productCount, size, isNaturalSkin);
+                    Boots boots = new Boots(productId, productName, price, weight, colors, productCount, size, skinTypes);
                     try
                     {
                         productDao.saveProduct(boots);
@@ -156,10 +171,11 @@ public class Main
                     break;
                 case 2:
                     Main.getProductData();
-                    System.out.println("Podaj rozmiar ubrania (M, S, L, XL, XXL, XXXL)");
-                    clothSize = sc.next();
-                    System.out.println("Podaj rodzaj materiału");
-                    material = sc.next();
+                    System.out.println("Podaj rozmiar ubrania (w cyfrach)");
+                    size = sc.nextInt();
+                    System.out.println("Podaj rodzaj materiału (możliwe do wyboru to: LEATHER, FUR, COTTON, WOOL, POLYESTERS)");
+                    String material = sc.next();
+                    materials = MaterialParser.getMaterial(material);
                     try
                     {
                         List<Product> products = productService.getAllProducts();
@@ -172,7 +188,7 @@ public class Main
                         e.printStackTrace();
                     }
                     productId++;
-                    Cloth cloth = new Cloth(productId, productName, price, weight, color, productCount, clothSize, material);
+                    Cloth cloth = new Cloth(productId, productName, price, weight, colors, productCount, size, materials);
                     try
                     {
                         productDao.saveProduct(cloth);
@@ -196,7 +212,7 @@ public class Main
                         e.printStackTrace();
                     }
                     productId++;
-                    Product product = new Product(productId, productName, price, weight,color, productCount);
+                    Product product = new Product(productId, productName, price, weight, colors, productCount);
                     try
                     {
                         productDao.saveProduct(product);
@@ -219,8 +235,9 @@ public class Main
         sc.nextLine();
         System.out.println("Podaj wagę");
         weight = sc.nextFloat();
-        System.out.println("Podaj kolor");
-        color = sc.next();
+        System.out.println("Podaj kolor (możliwe do wyboru to: BLACK, WHITE, RED, GREEN, BLUE, YELLOW");
+        String color = sc.next();
+        colors = ColorParser.getColor(color);
         System.out.println("Podaj ilość produktów");
         productCount = sc.nextInt();
     }

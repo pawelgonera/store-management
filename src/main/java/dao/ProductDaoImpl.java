@@ -3,10 +3,6 @@ package dao;
 import api.ProductDao;
 import entity.Product;
 import entity.parser.ProductParser;
-import exception.ProductCountNegativeException;
-import exception.ProductNameEmptyException;
-import exception.ProductPriceNoPositiveException;
-import exception.ProductWeightNoPositiveException;
 import utils.FileUtils;
 import validator.ProductValidator;
 
