@@ -5,62 +5,50 @@ import entity.User;
 import entity.parser.UserParser;
 import utils.FileUtils;
 import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao
 {
-    private static final String fileName = "users.txt";
+    Connection connection;
+    private static final String databaseName = "users";
+    private static final String user = "root";
+    private static final String pswd = "pswd.bin";
 
     private static UserDaoImpl instance = null;
 
-    public UserDaoImpl(String fileName)
+    public UserDaoImpl(String pswd)
     {
         try
         {
-            FileUtils.createNewFile(fileName);
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?useSSL=false", user, pswd);
 
-        }catch (IOException e)
+        }catch (Exception e)
         {
-            System.out.println("Error with creating new file");
+            System.out.println("Error with connect to MySQL database");
         }
     }
 
     public static UserDaoImpl getInstance()
     {
         if(instance == null)
-            instance = new UserDaoImpl(fileName);
+            instance = new UserDaoImpl(pswd);
 
         return instance;
     }
 
     @Override
-    public void saveUser(User user) throws IOException
+    public void createUser(User user)
     {
-        List<User> users = getAllUsers();
 
-        users.add(user);
 
-        saveUsers(users);
 
     }
 
     @Override
-    public void saveUsers(List<User> users) throws IOException
-    {
-        BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(fileName, true)));
-        FileUtils.clearFiler(fileName);
-        for(User user : users)
-        {
-            writer.write(user.toString());
-            writer.newLine();
-        }
-
-        writer.close();
-    }
-
-    @Override
-    public void removeUserById(Long userId) throws IOException
+    public void removeUserById(Long userId)
     {
         List<User> users = getAllUsers();
 
@@ -74,7 +62,7 @@ public class UserDaoImpl implements UserDao
     }
 
     @Override
-    public void removeUserByLogin(String login) throws IOException
+    public void removeUserByLogin(String login)
     {
         List<User> users = getAllUsers();
 
@@ -88,26 +76,38 @@ public class UserDaoImpl implements UserDao
     }
 
     @Override
-    public List<User> getAllUsers() throws IOException
+    public List<User> getAllUsers()
     {
         List<User> users = new ArrayList<User>();
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        Statement statement;
 
-        String readLine;
-        while((readLine = reader.readLine()) != null)
+        try
         {
-            User user = UserParser.parseUser(readLine);
+            String query = "SELECT * FROM " + databaseName;
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
 
-            if(user != null)
+            while(resultSet.next())
+            {
+                Integer id = resultSet.getInt("id");
+                String login = resultSet.getString("login");
+                String password = resultSet.getString("password");
+
+                User user = new User(id, login, password);
                 users.add(user);
-        }
+            }
 
-        reader.close();
+            statement.close();
+
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
 
         return users;
     }
 
-    public User getUserByLogin(String login) throws IOException
+    public User getUserByLogin(String login)
     {
         List<User> users = getAllUsers();
 
