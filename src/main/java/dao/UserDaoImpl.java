@@ -2,9 +2,7 @@ package dao;
 
 import api.UserDao;
 import entity.User;
-import entity.parser.UserParser;
-import utils.FileUtils;
-import java.io.*;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,8 @@ import java.util.List;
 public class UserDaoImpl implements UserDao
 {
     Connection connection;
-    private static final String databaseName = "users";
+    private static final String databaseName = "store_project";
+    private static final String tableName = "users";
     private static final String user = "root";
     private static final String pswd = "pswd.bin";
 
@@ -42,37 +41,63 @@ public class UserDaoImpl implements UserDao
     @Override
     public void createUser(User user)
     {
+        PreparedStatement preparedStatement;
+        try
+        {
+            String query = "INSERT INTO " + tableName + " (login, password) VALUES(?, ?)";
+            preparedStatement = connection.prepareStatement(query);
 
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getPassword());
 
-
+            preparedStatement.execute();
+            preparedStatement.close();
+        }catch (SQLException e)
+        {
+            System.err.println("Can't create new user in MySQL database");
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void removeUserById(Long userId)
+    public void deleteUserById(Long userId)
     {
-        List<User> users = getAllUsers();
-
-        for(int i = 0; i<users.size(); i++)
+        PreparedStatement preparedStatement;
+        try
         {
-            if(users.get(i).getId() == userId)
-                users.remove(i);
-        }
+            String query = "DELETE FROM " + tableName + " WHERE id = ?";
+            preparedStatement = connection.prepareStatement(query);
 
-        saveUsers(users);
+            preparedStatement.setLong(1, userId);
+
+            preparedStatement.execute();
+            preparedStatement.close();
+        }catch (SQLException e)
+        {
+            System.err.println("Can't delete user from MySQL database");
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void removeUserByLogin(String login)
+    public void deleteUserByLogin(String login)
     {
-        List<User> users = getAllUsers();
+        PreparedStatement preparedStatement;
 
-        for(int i = 0; i<users.size(); i++)
+        try
         {
-            if(users.get(i).getLogin().equals(login))
-                users.remove(i);
-        }
+            String query = "DELETE FROM " + tableName + " WHERE login = ?";
+            preparedStatement = connection.prepareStatement(query);
 
-        saveUsers(users);
+            preparedStatement.setString(1, login);
+
+            preparedStatement.execute();
+            preparedStatement.close();
+        }catch (SQLException e)
+        {
+            System.err.println("Can't delete user from MySQL database");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -83,7 +108,7 @@ public class UserDaoImpl implements UserDao
 
         try
         {
-            String query = "SELECT * FROM " + databaseName;
+            String query = "SELECT * FROM " + tableName;
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
@@ -101,22 +126,41 @@ public class UserDaoImpl implements UserDao
 
         }catch (SQLException e)
         {
+            System.err.println("Can't get the users from MySQL database");
             e.printStackTrace();
         }
 
         return users;
     }
 
-    public User getUserByLogin(String login)
+    public User getUserByLogin(String userLogin)
     {
-        List<User> users = getAllUsers();
+       Statement statement;
+       try
+       {
+           String query = "SELECT * FROM " + tableName + " WHERE login = '" + userLogin + "'";
+           statement = connection.createStatement();
+           ResultSet resultSet = statement.executeQuery(query);
 
-        for(User user : users)
-        {
-            if(user.getLogin().equals(login))
-                return user;
-        }
+           while(resultSet.next())
+           {
+               Integer id = resultSet.getInt("id");
+               String login = resultSet.getString("login");
+               String password = resultSet.getString("password");
 
-        return null;
+               User user = new User(id, login, password);
+
+               return user;
+           }
+
+           statement.close();
+
+       }catch (SQLException e)
+       {
+           System.out.println("Can't get the user from MySQL database");
+           e.printStackTrace();
+       }
+
+       return null;
     }
 }
