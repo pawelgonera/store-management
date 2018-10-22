@@ -3,12 +3,11 @@ package service;
 import api.UserRegisterLoginFacade;
 import entity.User;
 
-import java.io.IOException;
 
 public class UserRegisterLoginFacadeImpl implements UserRegisterLoginFacade
 {
     private static UserRegisterLoginFacadeImpl instance = null;
-    private UserServiceImpl userService = UserServiceImpl.getInstance();
+    private UserServiceImpl userService;
 
     public UserRegisterLoginFacadeImpl()
     {

@@ -35,34 +35,22 @@ public class Main
     private static ProductServiceImpl productService;
     private static UserServiceImpl userService = UserServiceImpl.getInstance();
 
-
     static
     {
         try
         {
             productService = ProductServiceImpl.getInstance();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try
-        {
             productDao = ProductDaoImpl.getInstance();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    public static void main(String [] args) throws IOException
+    public static void main(String [] args)
     {
         UserRegisterLoginFacadeImpl userRegister = UserRegisterLoginFacadeImpl.getInstance();
-
-
-        //System.out.println(productDao.getAllProducts());
-
-        System.out.println(Material.LEATHER);
 
         do
         {
@@ -91,11 +79,7 @@ public class Main
                         userId = users.get(users.size()-1).getId();
                     userId++;
                         userRegister.registerLogin(new User(userId, login, password));
-
-
                     break;
-
-
             }
         }while(choose != 0);
 

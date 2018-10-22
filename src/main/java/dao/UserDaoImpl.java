@@ -3,6 +3,8 @@ package dao;
 import api.UserDao;
 import entity.User;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +15,28 @@ public class UserDaoImpl implements UserDao
     private static final String databaseName = "store_project";
     private static final String tableName = "users";
     private static final String user = "root";
-    private static final String pswd = "pswd.bin";
+    private static final String fileName = ".idea/pswd_data/pswd.bin";
+    private static String pswd;
 
     private static UserDaoImpl instance = null;
 
-    public UserDaoImpl(String pswd)
+    private void getPass()
+    {
+        try
+        {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+
+            pswd = bufferedReader.readLine();
+
+            bufferedReader.close();
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void init()
     {
         try
         {
@@ -30,10 +49,17 @@ public class UserDaoImpl implements UserDao
         }
     }
 
+
+    public UserDaoImpl()
+    {
+        getPass();
+        init();
+    }
+
     public static UserDaoImpl getInstance()
     {
         if(instance == null)
-            instance = new UserDaoImpl(pswd);
+            instance = new UserDaoImpl();
 
         return instance;
     }

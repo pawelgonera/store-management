@@ -30,9 +30,8 @@ public class UserValidator
         return instance;
     }
 
-    public boolean isValidate(User user) throws UserShortLengthLoginException, UserShortLengthPasswordException, UserLoginAlreadyExistException ,IOException {
-
-
+    public boolean isValidate(User user) throws UserShortLengthLoginException, UserShortLengthPasswordException
+    {
         if(!isLoginLongEnough(user.getLogin()))
         {
             throw new UserShortLengthLoginException("Login " + user.getLogin() + " is to short");

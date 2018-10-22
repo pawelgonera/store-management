@@ -31,7 +31,8 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public List<User> getAllUsers() throws IOException {
+    public List<User> getAllUsers()
+    {
 
         return userDao.getAllUsers();
     }
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService
 
             if(userValidator.isValidate(user))
             {
-                userDao.saveUser(user);
+                userDao.createUser(user);
                 return true;
             }
 
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService
         return false;
     }
 
-    private boolean isLoginAlreadyExist(String login) throws IOException
+    private boolean isLoginAlreadyExist(String login)
     {
         User user = getUserByLogin(login);
 
@@ -70,13 +71,13 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public void removeUserById(Long id) throws IOException
+    public void removeUserById(Long id)
     {
-        userDao.removeUserById(id);
+        userDao.deleteUserById(id);
     }
 
     @Override
-    public User getUserById(Long id) throws IOException
+    public User getUserById(Long id)
     {
         List<User> users = getAllUsers();
 
@@ -90,7 +91,7 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public User getUserByLogin(String login) throws IOException
+    public User getUserByLogin(String login)
     {
         List<User> users = getAllUsers();
 
@@ -106,15 +107,7 @@ public class UserServiceImpl implements UserService
     @Override
     public boolean isCorrectLoginAndPassowrd(String login, String password)
     {
-        User user = null;
-        try
-        {
-            user = getUserByLogin(login);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        User user = getUserByLogin(login);
 
         if(user.getLogin().equals(login) && user.getPassword().equals(password))
             return true;
