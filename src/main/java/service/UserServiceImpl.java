@@ -5,6 +5,8 @@ import api.UserService;
 import dao.UserDaoImpl;
 import entity.User;
 import exception.UserLoginAlreadyExistException;
+import exception.UserShortLengthLoginException;
+import exception.UserShortLengthPasswordException;
 import validator.UserValidator;
 import java.io.IOException;
 import java.util.List;
@@ -38,27 +40,18 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public boolean addUser(User user)
+    public boolean addUser(User user) throws UserLoginAlreadyExistException, UserShortLengthLoginException, UserShortLengthPasswordException
     {
-        try
+        if(isLoginAlreadyExist(user.getLogin()))
         {
-            if(isLoginAlreadyExist(user.getLogin()))
-            {
-                throw  new UserLoginAlreadyExistException();
-            }
-
-            if(userValidator.isValidate(user))
-            {
-                userDao.createUser(user);
-                return true;
-            }
-
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+            throw  new UserLoginAlreadyExistException();
         }
 
+        if(userValidator.isValidate(user))
+        {
+            userDao.createUser(user);
+            return true;
+        }
 
         return false;
     }

@@ -6,18 +6,17 @@ import exception.ProductNameEmptyException;
 import exception.ProductPriceNoPositiveException;
 import exception.ProductWeightNoPositiveException;
 
-import java.io.IOException;
-
-
 public class ProductValidator
 {
     private static ProductValidator instance = null;
 
 
-    public ProductValidator() throws IOException {
+    public ProductValidator()
+    {
+
     }
 
-    public static ProductValidator getInstance() throws IOException
+    public static ProductValidator getInstance()
     {
         if(instance == null)
             instance = new ProductValidator();

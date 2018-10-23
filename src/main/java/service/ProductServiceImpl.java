@@ -17,12 +17,12 @@ public class ProductServiceImpl implements ProductService
 
     private ProductValidator productValidator = ProductValidator.getInstance();
 
-    public ProductServiceImpl() throws IOException
+    public ProductServiceImpl()
     {
 
     }
 
-    public static ProductServiceImpl getInstance() throws IOException
+    public static ProductServiceImpl getInstance()
     {
         if(instance == null)
             instance = new ProductServiceImpl();
@@ -32,13 +32,13 @@ public class ProductServiceImpl implements ProductService
 
 
     @Override
-    public List<Product> getAllProducts() throws IOException
+    public List<Product> getAllProducts()
     {
         return productDao.getAllProducts();
     }
 
     @Override
-    public Integer getProductCountOnList() throws IOException
+    public Integer getProductCountOnList()
     {
         return productDao.getAllProducts().size();
     }
@@ -46,15 +46,8 @@ public class ProductServiceImpl implements ProductService
     @Override
     public boolean isProductOnWarehouse(String productName)
     {
-        List<Product> products = null;
-        try
-        {
-            products = productDao.getAllProducts();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        List<Product> products;
+        products = productDao.getAllProducts();
 
         for(int i = 0; i<products.size(); i++)
         {
@@ -71,15 +64,8 @@ public class ProductServiceImpl implements ProductService
     @Override
     public boolean isProductExist(String productName)
     {
-        Product product = null;
-        try
-        {
-            product = getProductByName(productName);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        Product product;
+        product = getProductByName(productName);
 
         if(product == null)
                 return false;
@@ -90,15 +76,8 @@ public class ProductServiceImpl implements ProductService
     @Override
     public boolean isProductExist(Long id)
     {
-        Product product = null;
-        try
-        {
-            product = getProductById(id);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        Product product;
+        product = getProductById(id);
 
         if(product == null)
                 return false;
@@ -113,7 +92,7 @@ public class ProductServiceImpl implements ProductService
         {
             if(productValidator.isValidate(product))
             {
-                productDao.saveProduct(product);
+                productDao.createProduct(product);
                 return  true;
             }
 
@@ -127,7 +106,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public Product getProductById(Long productId) throws IOException
+    public Product getProductById(Long productId)
     {
         List<Product> products = getAllProducts();
 
@@ -141,7 +120,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public Product getProductByName(String productName) throws IOException
+    public Product getProductByName(String productName)
     {
         List<Product> products = getAllProducts();
 

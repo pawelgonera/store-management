@@ -159,6 +159,7 @@ public class UserDaoImpl implements UserDao
         return users;
     }
 
+    @Override
     public User getUserByLogin(String userLogin)
     {
        Statement statement;
@@ -188,5 +189,27 @@ public class UserDaoImpl implements UserDao
        }
 
        return null;
+    }
+
+    @Override
+    public void updateUser(User user)
+    {
+        PreparedStatement statement;
+        try
+        {
+            String query = "UPDATE " + tableName + " SET login = ?, password = ? WHERE id = " + user.getId();
+
+            statement = connection.prepareStatement(query);
+
+            statement.setString(1, user.getLogin());
+            statement.setString(2, user.getPassword());
+
+            statement.execute();
+            statement.close();
+
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

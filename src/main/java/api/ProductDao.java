@@ -6,14 +6,12 @@ import java.util.List;
 
 public interface ProductDao
 {
-    void saveProduct(Product product) throws IOException;
+    void createProduct(Product product);
 
-    void saveProducts(List<Product> products) throws IOException;
+    void deleteProductById(Long productId);
 
-    void removeProductById(Long productId) throws IOException;
+    void deleteProductByName(String productName);
 
-    void removeProductByName(String productName) throws IOException;;
-
-    List<Product> getAllProducts() throws IOException;
+    List<Product> getAllProducts();
 
 }

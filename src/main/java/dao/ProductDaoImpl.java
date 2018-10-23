@@ -2,31 +2,62 @@ package dao;
 
 import api.ProductDao;
 import entity.Product;
+import entity.enums.Colors;
 import entity.parser.ProductParser;
-import utils.FileUtils;
 import validator.ProductValidator;
 
 import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDaoImpl implements ProductDao
 {
-    private String fileName = "products.txt";
+    private Connection connection;
+    private static final String databaseName = "store_project";
+    private static final String tableName = "products";
+    private static final String user = "rooot";
+    private static String pswd;
+    private String fileName = ".idea/pswd_data/pswd.bin";
+
     private static ProductDaoImpl instance = null;
+
     private ProductValidator productValidator = ProductValidator.getInstance();
 
-    public ProductDaoImpl() throws IOException {
+    private void getPass()
+    {
         try
         {
-            FileUtils.createNewFile(fileName);
-        }catch (IOException e)
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+
+            pswd = bufferedReader.readLine();
+
+            bufferedReader.close();
+        }catch (Exception e)
         {
             e.printStackTrace();
         }
     }
 
-    public static ProductDaoImpl getInstance() throws IOException
+    private void init()
+    {
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?useSSL=false", user, pswd);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public ProductDaoImpl()
+    {
+        getPass();
+        init();
+    }
+
+    public static ProductDaoImpl getInstance()
     {
         if(instance == null)
             instance = new ProductDaoImpl();
@@ -35,84 +66,107 @@ public class ProductDaoImpl implements ProductDao
     }
 
     @Override
-    public void saveProduct(Product product) throws IOException
+    public void createProduct(Product product)
     {
-       List<Product> products = getAllProducts();
-
+       PreparedStatement statement;
        try
        {
-           if (productValidator.isValidate(product)) {
-               products.add(product);
+           char productType = product.toString().charAt(0);
 
-               saveProducts(products);
-           }
-       }
-       catch (Exception e)
+           String query = "INSERT INTO " + tableName + " (productType, productName, price, weight, color, productCount) VALUES(?, ?, ?, ?, ?, ?)";
+           statement = connection.prepareStatement(query);
+
+           statement.setString(1, productType + "");
+           statement.setString(2, product.getProductName());
+           statement.setFloat(3, product.getPrice());
+           statement.setFloat(4, product.getWeight());
+           statement.setString(5, product.getColor().name());
+           statement.setInt(6, product.getProductCount());
+
+           statement.execute();
+           statement.close();
+       }catch (SQLException e)
        {
-           System.out.println(e.getMessage());
+           e.printStackTrace();
        }
     }
 
     @Override
-    public void saveProducts(List<Product> products) throws IOException
+    public void deleteProductById(Long productId)
     {
-        FileUtils.clearFiler(fileName);
-        BufferedWriter writer = new BufferedWriter(new PrintWriter(new FileOutputStream(fileName, false)));
-
-        for (Product product : products) {
-            writer.write(product.toString());
-            writer.newLine();
-        }
-
-        writer.close();
-
-    }
-
-    @Override
-    public void removeProductById(Long productId) throws IOException
-    {
-        List<Product> products = getAllProducts();
-
-        for (int i = 0; i < products.size(); i++)
+        PreparedStatement statement;
+        try
         {
-            if (products.get(i).getId() == productId)
-                products.remove(i);
-        }
+            String query = "DELETE FROM " + tableName + " WHERE id = ?";
+            statement = connection.prepareStatement(query);
 
-        saveProducts(products);
-    }
+            statement.setLong(1, productId);
 
-    @Override
-    public void removeProductByName(String productName) throws IOException
-    {
-        List<Product> products = getAllProducts();
+            statement.execute();
+            statement.close();
 
-        for(int i = 0; i<products.size(); i++)
+        }catch (SQLException e)
         {
-            if(products.get(i).getProductName().equals(productName))
-                products.remove(i);
+            e.printStackTrace();
         }
-
-        saveProducts(products);
     }
 
     @Override
-    public List<Product> getAllProducts() throws IOException
+    public void deleteProductByName(String productName)
+    {
+        PreparedStatement statement;
+        try
+        {
+            String query = "DELETE FROM " + tableName + " WHERE id = ?";
+            statement = connection.prepareStatement(query);
+
+            statement.setString(1, productName);
+
+            statement.execute();
+            statement.close();
+
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<Product> getAllProducts()
     {
         List<Product> products = new ArrayList<Product>();
 
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
-
-        String readLine;
-
-        while((readLine = reader.readLine()) != null)
+        Statement statement;
+        try
         {
-            Product product = ProductParser.convertProduct(readLine);
-            if(product != null)
-                products.add(product);
-        }
+            String query = "SELECT * FROM " + tableName;
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
 
-        reader.close();
+            while (resultSet.next())
+            {
+                String productType = resultSet.getString("productType");
+                Integer id = resultSet.getInt("id");
+                String productName = resultSet.getString("productName");;
+                Float price = resultSet.getFloat("price");
+                Float weight = resultSet.getFloat("weight");
+                String color = resultSet.getString("color");
+                Integer productCount = resultSet.getInt("productCount");
+                Integer size = resultSet.getInt("size");
+                String material = resultSet.getString("material");
+                String skinType = resultSet.getString("skinType");
+
+                Product product = new Product(id, productName, price, weight, Colors.valueOf(color), productCount);
+
+                products.add(product);
+            }
+
+            statement.close();
+
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
 
         return products;
     }
