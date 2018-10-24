@@ -8,6 +8,8 @@ import entity.enums.Material;
 import entity.enums.ProductSeparators;
 import entity.enums.SkinType;
 
+import java.util.Arrays;
+
 import static entity.parser.ColorParser.getColor;
 import static entity.parser.MaterialParser.getMaterial;
 import static entity.parser.SkinTypeParser.getSkinType;
@@ -18,7 +20,7 @@ public class ProductParser
     private static final String SEPARATOR = ProductSeparators.PRODUCT_SEPARATOR.getSeparator();
     private static final String PRODUCT_ID = ProductSeparators.PRODUCT_ID.getSeparator();
     private static final String CLOTH_ID = ProductSeparators.CLOTH_ID.getSeparator();
-    private static final String BOOTS_SEPARATOR = ProductSeparators.BOOTS_ID.getSeparator();
+    private static final String BOOTS_ID = ProductSeparators.BOOTS_ID.getSeparator();
 
     public static Product convertProduct(String strProduct)
     {
@@ -31,11 +33,11 @@ public class ProductParser
         }
         else if(productType == CLOTH_ID.charAt(0))
         {
-            return parseBoots(strProduct);
-        }
-        else if(productType == BOOTS_SEPARATOR.charAt(0))
-        {
             return parseCloth(strProduct);
+        }
+        else if(productType == BOOTS_ID.charAt(0))
+        {
+            return parseBoots(strProduct);
         }
 
         return null;
@@ -87,8 +89,10 @@ public class ProductParser
         Colors colors = getColor(color);
         Integer productCount = Integer.parseInt(productInfos[6]);
         Integer size = Integer.parseInt(productInfos[7]);
-        String skinType = productInfos[8];
+        String skinType = productInfos[9];
         SkinType skinTypes = getSkinType(skinType);
+
+        //System.out.println(strProduct);
 
         return new Boots(id, productName, price, weight, colors, productCount, size, skinTypes);
     }

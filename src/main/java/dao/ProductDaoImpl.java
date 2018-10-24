@@ -1,8 +1,9 @@
 package dao;
 
 import api.ProductDao;
+import entity.Boots;
+import entity.Cloth;
 import entity.Product;
-import entity.enums.Colors;
 import entity.parser.ProductParser;
 import validator.ProductValidator;
 
@@ -16,7 +17,7 @@ public class ProductDaoImpl implements ProductDao
     private Connection connection;
     private static final String databaseName = "store_project";
     private static final String tableName = "products";
-    private static final String user = "rooot";
+    private static final String user = "root";
     private static String pswd;
     private String fileName = ".idea/pswd_data/pswd.bin";
 
@@ -73,7 +74,7 @@ public class ProductDaoImpl implements ProductDao
        {
            char productType = product.toString().charAt(0);
 
-           String query = "INSERT INTO " + tableName + " (productType, productName, price, weight, color, productCount) VALUES(?, ?, ?, ?, ?, ?)";
+           String query = "INSERT INTO " + tableName + " (productType, productName, price, weight, color, productCount, size, material, skinType) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
            statement = connection.prepareStatement(query);
 
            statement.setString(1, productType + "");
@@ -82,6 +83,28 @@ public class ProductDaoImpl implements ProductDao
            statement.setFloat(4, product.getWeight());
            statement.setString(5, product.getColor().name());
            statement.setInt(6, product.getProductCount());
+
+           if(productType == 'C')
+           {
+               statement.setInt(7, ((Cloth) product).getSize());
+               statement.setString(8, ((Cloth) product).getMaterial().name().toUpperCase());
+           }
+           else
+           {
+               statement.setInt(7, 0);
+               statement.setString(8, " ");
+           }
+
+           if(productType == 'B')
+           {
+               statement.setInt(7, ((Boots) product).getSize());
+               statement.setString(9, ((Boots) product).isNaturalSkin().name().toUpperCase());
+           }
+           else
+           {
+               statement.setInt(7, 0);
+               statement.setString(9, " ");
+           }
 
            statement.execute();
            statement.close();
@@ -117,7 +140,7 @@ public class ProductDaoImpl implements ProductDao
         PreparedStatement statement;
         try
         {
-            String query = "DELETE FROM " + tableName + " WHERE id = ?";
+            String query = "DELETE FROM " + tableName + " WHERE productName = ?";
             statement = connection.prepareStatement(query);
 
             statement.setString(1, productName);
@@ -135,7 +158,7 @@ public class ProductDaoImpl implements ProductDao
     public List<Product> getAllProducts()
     {
         List<Product> products = new ArrayList<Product>();
-
+        StringBuilder sb = new StringBuilder();
         Statement statement;
         try
         {
@@ -145,18 +168,44 @@ public class ProductDaoImpl implements ProductDao
 
             while (resultSet.next())
             {
-                String productType = resultSet.getString("productType");
-                Integer id = resultSet.getInt("id");
+                sb.delete(0, sb.capacity());
+                sb.append(resultSet.getString("productType"));
+                sb.append("#");
+                sb.append(resultSet.getInt("id"));
+                sb.append("#");
+                sb.append(resultSet.getString("productName"));
+                sb.append("#");
+                sb.append(resultSet.getFloat("price"));
+                sb.append("#");
+                sb.append(resultSet.getFloat("weight"));
+                sb.append("#");
+                sb.append(resultSet.getString("color"));
+                sb.append("#");
+                sb.append(resultSet.getInt("productCount"));
+                sb.append("#");
+                sb.append(resultSet.getInt("size"));
+                sb.append("#");
+                sb.append(resultSet.getString("material"));
+                sb.append("#");
+                sb.append(resultSet.getString("skinType"));
+
+                /*
+                String productType = resultSet.getString("productType")
+                Integer id = resultSet.getInt("id")
                 String productName = resultSet.getString("productName");;
                 Float price = resultSet.getFloat("price");
                 Float weight = resultSet.getFloat("weight");
                 String color = resultSet.getString("color");
                 Integer productCount = resultSet.getInt("productCount");
-                Integer size = resultSet.getInt("size");
+                Integer clothSize = resultSet.getInt("clothSize");
+                Integer bootsSize = resultSet.getInt("bootsSize");
                 String material = resultSet.getString("material");
                 String skinType = resultSet.getString("skinType");
+                */
 
-                Product product = new Product(id, productName, price, weight, Colors.valueOf(color), productCount);
+                //Product product = new Product(id, productName, price, weight, Colors.valueOf(color), productCount);
+
+                Product product = ProductParser.convertProduct(sb.toString());
 
                 products.add(product);
             }

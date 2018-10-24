@@ -10,6 +10,13 @@ public class Cloth extends Product
     private int size;
     private Material material;
 
+    public Cloth(String productName, float price, float weight, Colors color, int productCount, int size, Material material)
+    {
+        super(productName, price, weight, color, productCount);
+        this.size = size;
+        this.material = material;
+    }
+
     public Cloth(long id, String productName, float price, float weight, Colors color, int productCount, int size, Material material)
     {
         super(id, productName, price, weight, color, productCount);
@@ -30,9 +37,9 @@ public class Cloth extends Product
     @Override
     public String toString()
     {
-        return  ProductSeparators.CLOTH_ID.toString() + ProductSeparators.PRODUCT_SEPARATOR +
-                standardToString() + ProductSeparators.PRODUCT_SEPARATOR +
-                this.size + ProductSeparators.PRODUCT_SEPARATOR +
-                this.material.toString();
+        return  ProductSeparators.CLOTH_ID.getSeparator() + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
+                standardToString() + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
+                this.size + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
+                this.material.name();
     }
 }

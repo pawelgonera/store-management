@@ -1,7 +1,5 @@
 package entity.enums;
 
-import java.awt.*;
-
 public enum Colors
 {
     BLACK("#000000"),

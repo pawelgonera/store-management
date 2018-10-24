@@ -8,4 +8,9 @@ public enum Material
     WOOL,
     POLYESTERS,
     DEFAULT;
+
+    Material()
+    {
+
+    }
 }

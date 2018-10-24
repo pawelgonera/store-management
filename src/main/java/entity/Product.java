@@ -12,6 +12,15 @@ public class Product
     private Colors color;
     private int productCount;
 
+    public Product(String productName, float price, float weight, Colors color, int productCount)
+    {
+        this.productName = productName;
+        this.price = price;
+        this.weight = weight;
+        this.color = color;
+        this.productCount = productCount;
+    }
+
     public Product(long id, String productName, float price, float weight, Colors color, int productCount)
     {
         this.id = id;
@@ -79,18 +88,18 @@ public class Product
 
     public String standardToString()
     {
-        return  this.id + ProductSeparators.PRODUCT_SEPARATOR.toString() +
-                this.productName + ProductSeparators.PRODUCT_SEPARATOR +
-                this.price + ProductSeparators.PRODUCT_SEPARATOR +
-                this.weight + ProductSeparators.PRODUCT_SEPARATOR +
-                this.color + ProductSeparators.PRODUCT_SEPARATOR +
+        return  this.id + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
+                this.productName + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
+                this.price + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
+                this.weight + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
+                this.color + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
                 this.productCount;
     }
 
     @Override
     public String toString()
     {
-        return  ProductSeparators.PRODUCT_ID.toString() + ProductSeparators.PRODUCT_SEPARATOR +
+        return  ProductSeparators.PRODUCT_ID.getSeparator() + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
                 standardToString();
     }
 }
