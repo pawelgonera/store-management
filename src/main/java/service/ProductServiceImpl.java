@@ -4,6 +4,10 @@ import api.ProductDao;
 import api.ProductService;
 import dao.ProductDaoImpl;
 import entity.Product;
+import exception.ProductCountNegativeException;
+import exception.ProductNameEmptyException;
+import exception.ProductPriceNoPositiveException;
+import exception.ProductWeightNoPositiveException;
 import validator.ProductValidator;
 import java.util.List;
 
@@ -83,20 +87,12 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public boolean saveProduct(Product product)
+    public boolean saveProduct(Product product) throws ProductPriceNoPositiveException, ProductNameEmptyException, ProductCountNegativeException, ProductWeightNoPositiveException
     {
-        try
+        if(productValidator.isValidate(product))
         {
-            if(productValidator.isValidate(product))
-            {
-                productDao.createProduct(product);
-                return  true;
-            }
-
-        }
-        catch(Exception e)
-        {
-            System.out.println(e.getMessage());
+            productDao.createProduct(product);
+            return  true;
         }
 
         return  false;

@@ -98,18 +98,11 @@ public class UserServiceImpl implements UserService
     @Override
     public boolean isCorrectLoginAndPassword(String login, String password)
     {
-        try
-        {
-            User user = getUserByLogin(login);
+        User user = getUserByLogin(login);
 
-            if(user.getLogin().equals(login) && user.getPassword().equals(password))
-                return true;
-
-        }catch (NullPointerException e)
-        {
-            e.getMessage();
-        }
-
-        return false;
+        if(user.getLogin().equals(login) && user.getPassword().equals(password))
+            return true;
+        else
+            return false;
     }
 }

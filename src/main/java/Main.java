@@ -118,7 +118,7 @@ public class Main
         System.out.println("Type name of product to delete");
         String productNameToDelete = sc.next();
 
-        productFacade.removeProduct(productNameToDelete);
+        System.out.println(productFacade.removeProduct(productNameToDelete));
     }
 
     public static void displayAllProducts()

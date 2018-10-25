@@ -2,7 +2,9 @@ package service;
 
 import api.UserRegisterLoginFacade;
 import entity.User;
+import exception.UserLoginAlreadyExistException;
 import exception.UserShortLengthLoginException;
+import exception.UserShortLengthPasswordException;
 
 public class UserRegisterLoginFacadeImpl implements UserRegisterLoginFacade
 {
@@ -29,8 +31,17 @@ public class UserRegisterLoginFacadeImpl implements UserRegisterLoginFacade
         {
             userService.addUser(user);
 
-        }catch (Exception e)
+        }catch (UserLoginAlreadyExistException e)
         {
+            e.printStackTrace();
+            return e.getMessage();
+        }catch (UserShortLengthLoginException e)
+        {
+            e.printStackTrace();
+            return e.getMessage();
+        }catch (UserShortLengthPasswordException e)
+        {
+            e.printStackTrace();
             return e.getMessage();
         }
 

@@ -2,7 +2,12 @@ package service;
 
 import api.ProductFacade;
 import entity.Product;
+import exception.ProductCountNegativeException;
+import exception.ProductNameEmptyException;
+import exception.ProductPriceNoPositiveException;
+import exception.ProductWeightNoPositiveException;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ProductFacadeImpl implements ProductFacade
@@ -30,8 +35,21 @@ public class ProductFacadeImpl implements ProductFacade
         {
             productService.saveProduct(product);
 
-        }catch (Exception e)
+        }catch (ProductPriceNoPositiveException e)
         {
+            e.printStackTrace();
+            return e.getMessage();
+        }catch (ProductWeightNoPositiveException e)
+        {
+            e.printStackTrace();
+            return e.getMessage();
+        }catch (ProductCountNegativeException e)
+        {
+            e.printStackTrace();
+            return e.getMessage();
+        }catch (ProductNameEmptyException e)
+        {
+            e.printStackTrace();
             return e.getMessage();
         }
 
@@ -55,8 +73,15 @@ public class ProductFacadeImpl implements ProductFacade
     @Override
     public List<Product> getAllProducts()
     {
-        List<Product> products = productService.getAllProducts();
+        try
+        {
+            return productService.getAllProducts();
 
-        return products;
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Collections.emptyList();
     }
 }
