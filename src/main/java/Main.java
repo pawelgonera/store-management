@@ -42,8 +42,6 @@ public class Main
 
         System.out.println(products);
 
-        System.out.println(userService.getUserByLogin("Poul"));
-
         do
         {
             System.out.println("Store Management Menu");

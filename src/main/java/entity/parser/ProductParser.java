@@ -8,6 +8,8 @@ import entity.enums.Material;
 import entity.enums.ProductSeparators;
 import entity.enums.SkinType;
 
+import java.util.Vector;
+
 import static entity.parser.ColorParser.getColor;
 import static entity.parser.MaterialParser.getMaterial;
 import static entity.parser.SkinTypeParser.getSkinType;
@@ -15,25 +17,23 @@ import static entity.parser.SkinTypeParser.getSkinType;
 
 public class ProductParser
 {
-    private static final String SEPARATOR = ProductSeparators.PRODUCT_SEPARATOR.getSeparator();
     private static final String PRODUCT_ID = ProductSeparators.PRODUCT_ID.getSeparator();
     private static final String CLOTH_ID = ProductSeparators.CLOTH_ID.getSeparator();
     private static final String BOOTS_ID = ProductSeparators.BOOTS_ID.getSeparator();
 
-    public static Product convertProduct(String strProduct)
+    public static Product convertProduct(Vector strProduct)
     {
+        String productType = strProduct.firstElement().toString();
 
-        char productType = strProduct.charAt(0);
-
-        if(productType == PRODUCT_ID.charAt(0))
+        if(productType.equals(PRODUCT_ID))
         {
             return parseProduct(strProduct);
         }
-        else if(productType == CLOTH_ID.charAt(0))
+        else if(productType.equals(CLOTH_ID))
         {
             return parseCloth(strProduct);
         }
-        else if(productType == BOOTS_ID.charAt(0))
+        else if(productType.equals(BOOTS_ID))
         {
             return parseBoots(strProduct);
         }
@@ -41,52 +41,52 @@ public class ProductParser
         return null;
     }
 
-    private static Product parseProduct(String strProduct)
+    private static Product parseProduct(Vector strProduct)
     {
-        String[] productInfos = strProduct.split(SEPARATOR);
+        Object[] productInfos = strProduct.toArray();
 
-        Long id = Long.parseLong(productInfos[1]);
-        String productName = productInfos[2];
-        Float price = Float.parseFloat(productInfos[3]);
-        Float weight = Float.parseFloat(productInfos[4]);
-        String color = productInfos[5];
+        Long id = Long.parseLong(productInfos[1].toString());
+        String productName = (String) productInfos[2];
+        Float price = Float.parseFloat(productInfos[3].toString());
+        Float weight = Float.parseFloat(productInfos[4].toString());
+        String color = (String) productInfos[5];
         Colors colors = getColor(color);
-        Integer productCount = Integer.parseInt(productInfos[6]);
+        Integer productCount = Integer.parseInt(productInfos[6].toString());
 
         return new Product(id, productName, price, weight, colors, productCount);
     }
 
-    private static Product parseCloth(String strProduct)
+    private static Product parseCloth(Vector strProduct)
     {
-        String[] productInfos = strProduct.split(SEPARATOR);
+        Object[] productInfos = strProduct.toArray();
 
-        Long id = Long.parseLong(productInfos[1]);
-        String productName = productInfos[2];
-        Float price = Float.parseFloat(productInfos[3]);
-        Float weight = Float.parseFloat(productInfos[4]);
-        String color = productInfos[5];
+        Long id = Long.parseLong(productInfos[1].toString());
+        String productName = (String) productInfos[2];
+        Float price = Float.parseFloat(productInfos[3].toString());
+        Float weight = Float.parseFloat(productInfos[4].toString());
+        String color = (String) productInfos[5];
         Colors colors = getColor(color);
-        Integer productCount = Integer.parseInt(productInfos[6]);
-        Integer size = Integer.parseInt(productInfos[7]);
-        String material = productInfos[8];
+        Integer productCount = Integer.parseInt(productInfos[6].toString());
+        Integer size = Integer.parseInt(productInfos[7].toString());
+        String material = (String) productInfos[8];
         Material materials = getMaterial(material);
 
         return new Cloth(id, productName, price, weight, colors, productCount, size, materials);
     }
 
-    private static Product parseBoots(String strProduct)
+    private static Product parseBoots(Vector strProduct)
     {
-        String[] productInfos = strProduct.split(SEPARATOR);
+        Object[] productInfos = strProduct.toArray();
 
-        Long id = Long.parseLong(productInfos[1]);
-        String productName = productInfos[2];
-        Float price = Float.parseFloat(productInfos[3]);
-        Float weight = Float.parseFloat(productInfos[4]);
-        String color = productInfos[5];
+        Long id = Long.parseLong(productInfos[1].toString());
+        String productName = (String) productInfos[2];
+        Float price = Float.parseFloat(productInfos[3].toString());
+        Float weight = Float.parseFloat(productInfos[4].toString());
+        String color = (String) productInfos[5];
         Colors colors = getColor(color);
-        Integer productCount = Integer.parseInt(productInfos[6]);
-        Integer size = Integer.parseInt(productInfos[7]);
-        String skinType = productInfos[9];
+        Integer productCount = Integer.parseInt(productInfos[6].toString());
+        Integer size = Integer.parseInt(productInfos[7].toString());
+        String skinType = (String) productInfos[9];
         SkinType skinTypes = getSkinType(skinType);
 
         return new Boots(id, productName, price, weight, colors, productCount, size, skinTypes);
