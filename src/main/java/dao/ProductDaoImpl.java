@@ -5,7 +5,6 @@ import entity.Boots;
 import entity.Cloth;
 import entity.Product;
 import entity.parser.ProductParser;
-import validator.ProductValidator;
 
 import java.io.*;
 import java.sql.*;
@@ -22,8 +21,6 @@ public class ProductDaoImpl implements ProductDao
     private String fileName = ".idea/pswd_data/pswd.bin";
 
     private static ProductDaoImpl instance = null;
-
-    private ProductValidator productValidator = ProductValidator.getInstance();
 
     private void getPass()
     {

@@ -5,8 +5,6 @@ import api.ProductService;
 import dao.ProductDaoImpl;
 import entity.Product;
 import validator.ProductValidator;
-
-import java.io.IOException;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService
@@ -29,7 +27,6 @@ public class ProductServiceImpl implements ProductService
 
         return instance;
     }
-
 
     @Override
     public List<Product> getAllProducts()
@@ -131,5 +128,11 @@ public class ProductServiceImpl implements ProductService
         }
 
         return null;
+    }
+
+    @Override
+    public void removeProduct(String productName)
+    {
+        productDao.deleteProductByName(productName);
     }
 }

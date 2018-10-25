@@ -1,6 +1,5 @@
 package entity;
 
-
 import entity.enums.Colors;
 import entity.enums.Material;
 import entity.enums.ProductSeparators;

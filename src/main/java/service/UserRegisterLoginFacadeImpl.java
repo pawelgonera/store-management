@@ -2,7 +2,7 @@ package service;
 
 import api.UserRegisterLoginFacade;
 import entity.User;
-
+import exception.UserShortLengthLoginException;
 
 public class UserRegisterLoginFacadeImpl implements UserRegisterLoginFacade
 {
@@ -34,12 +34,12 @@ public class UserRegisterLoginFacadeImpl implements UserRegisterLoginFacade
             return e.getMessage();
         }
 
-        return "Dane są poprawne";
+        return "Dane są poprawne. Zarejestrowano nowego użytkownika";
     }
 
     @Override
     public boolean loginUser(String login, String password)
     {
-        return userService.isCorrectLoginAndPassowrd(login, password);
+        return userService.isCorrectLoginAndPassword(login, password);
     }
 }

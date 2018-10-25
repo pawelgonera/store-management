@@ -1,7 +1,6 @@
 package api;
 
 import entity.Product;
-
 import java.util.List;
 
 public interface ProductFacade

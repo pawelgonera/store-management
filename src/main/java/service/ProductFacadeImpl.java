@@ -8,14 +8,14 @@ import java.util.List;
 public class ProductFacadeImpl implements ProductFacade
 {
     private static ProductFacadeImpl instance = null;
-    private ProductServiceImpl productService;
+    private ProductServiceImpl productService = ProductServiceImpl.getInstance();
 
     public ProductFacadeImpl()
     {
-        productService = new ProductServiceImpl();
+
     }
 
-    public ProductFacadeImpl getInstance()
+    public static ProductFacadeImpl getInstance()
     {
         if(instance == null)
             instance = new ProductFacadeImpl();
@@ -29,6 +29,7 @@ public class ProductFacadeImpl implements ProductFacade
         try
         {
             productService.saveProduct(product);
+
         }catch (Exception e)
         {
             return e.getMessage();
@@ -40,8 +41,15 @@ public class ProductFacadeImpl implements ProductFacade
     @Override
     public String removeProduct(String productName)
     {
+        try
+        {
+             productService.removeProduct(productName);
+        }catch (Exception e)
+        {
+            return e.getMessage();
+        }
 
-        return null;
+        return "Produkt został poprawnie usunięty";
     }
 
     @Override

@@ -1,9 +1,6 @@
 package api;
 
 import entity.User;
-import exception.UserLoginAlreadyExistException;
-
-import java.io.IOException;
 import java.util.List;
 
 public interface UserDao

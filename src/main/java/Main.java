@@ -1,4 +1,4 @@
-import dao.ProductDaoImpl;
+
 import entity.Boots;
 import entity.Cloth;
 import entity.Product;
@@ -9,7 +9,7 @@ import entity.enums.SkinType;
 import entity.parser.ColorParser;
 import entity.parser.MaterialParser;
 import entity.parser.SkinTypeParser;
-import service.ProductServiceImpl;
+import service.ProductFacadeImpl;
 import service.UserRegisterLoginFacadeImpl;
 import service.UserServiceImpl;
 import java.util.List;
@@ -25,23 +25,24 @@ public class Main
     private static String skinType, material;
     private static float price, weight;
     private static long userId = 0, productId = 0;
-    private static ProductDaoImpl productDao;
-    private static ProductServiceImpl productService;
-    private static UserServiceImpl userService = UserServiceImpl.getInstance();
+    private static UserServiceImpl userService;
+    private static ProductFacadeImpl productFacade;
+    private static UserRegisterLoginFacadeImpl userRegister;
 
     static
     {
-        productService = ProductServiceImpl.getInstance();
-        productDao = ProductDaoImpl.getInstance();
+        userService = UserServiceImpl.getInstance();
+        productFacade = ProductFacadeImpl.getInstance();
+        userRegister = UserRegisterLoginFacadeImpl.getInstance();
     }
 
     public static void main(String [] args)
     {
-        UserRegisterLoginFacadeImpl userRegister = UserRegisterLoginFacadeImpl.getInstance();
-
-        List<Product> products = productDao.getAllProducts();
+        List<Product> products = productFacade.getAllProducts();
 
         System.out.println(products);
+
+        System.out.println(userService.getUserByLogin("Poul"));
 
         do
         {
@@ -58,10 +59,11 @@ public class Main
                     Main.getUserData();
                     if(userRegister.loginUser(login, password))
                     {
+                        System.out.println("Witamy " + login);
                         Main.loggedMenu();
                     }
                     else
-                        System.out.println("Błędne hasło !");
+                        System.out.println("Błędny login lub hasło !");
                     break;
                 case 2:
                     Main.getUserData();
@@ -69,7 +71,7 @@ public class Main
                     if(!users.isEmpty())
                         userId = users.get(users.size()-1).getId();
                     userId++;
-                        userRegister.registerLogin(new User(userId, login, password));
+                    System.out.println(userRegister.registerLogin(new User(userId, login, password)));
                     break;
             }
         }while(choose != 0);
@@ -116,12 +118,12 @@ public class Main
         System.out.println("Type name of product to delete");
         String productNameToDelete = sc.next();
 
-        productDao.deleteProductByName(productNameToDelete);
+        productFacade.removeProduct(productNameToDelete);
     }
 
     public static void displayAllProducts()
     {
-        List<Product> products = productDao.getAllProducts();
+        List<Product> products = productFacade.getAllProducts();
         for(Product product : products)
         {
             System.out.println(product);
@@ -136,7 +138,7 @@ public class Main
             System.out.println("2 - Dodaj ubrania");
             System.out.println("3 - Inne");
 
-            List<Product> products = productService.getAllProducts();
+            List<Product> products = productFacade.getAllProducts();
             choose = sc.nextInt();
 
             switch (choose)
@@ -150,7 +152,7 @@ public class Main
                     SkinType skinTypes = SkinTypeParser.getSkinType(skinType);
 
                     Boots boots = new Boots(productName, price, weight, colors, productCount, size, skinTypes);
-                    productDao.createProduct(boots);
+                    productFacade.createProduct(boots);
                     break;
                 case 2:
                     Main.getProductData();
@@ -168,7 +170,7 @@ public class Main
                     productId++;
 
                     Cloth cloth = new Cloth(productName, price, weight, colors, productCount, size, materials);
-                    productDao.createProduct(cloth);
+                    productFacade.createProduct(cloth);
                     break;
                 case 3:
                     Main.getProductData();
@@ -181,7 +183,7 @@ public class Main
                     productId++;
 
                     Product product = new Product(productName, price, weight, colors, productCount);
-                    productDao.createProduct(product);
+                    productFacade.createProduct(product);
                     break;
             }
         }

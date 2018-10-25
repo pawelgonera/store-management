@@ -1,15 +1,13 @@
 package api;
 
 import entity.Product;
-
-import java.io.IOException;
 import java.util.List;
 
 public interface ProductService
 {
-    List<Product> getAllProducts() throws IOException;
+    List<Product> getAllProducts();
 
-    Integer getProductCountOnList() throws IOException;
+    Integer getProductCountOnList();
 
     boolean isProductOnWarehouse(String productName);
 
@@ -19,7 +17,9 @@ public interface ProductService
 
     boolean saveProduct(Product product);
 
-    Product getProductById(Long productId) throws IOException;
+    Product getProductById(Long productId);
 
-    Product getProductByName(String productName) throws IOException;
+    Product getProductByName(String productName);
+
+    void removeProduct(String productName);
 }

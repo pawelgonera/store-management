@@ -4,7 +4,6 @@ import entity.enums.Colors;
 import entity.enums.ProductSeparators;
 import entity.enums.SkinType;
 
-
 public class Boots extends Product
 {
     private int size;

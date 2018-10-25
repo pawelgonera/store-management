@@ -20,5 +20,5 @@ public interface UserService
 
     void removeUserById(Long id) throws IOException;
 
-    boolean isCorrectLoginAndPassowrd(String login, String password);
+    boolean isCorrectLoginAndPassword(String login, String password);
 }

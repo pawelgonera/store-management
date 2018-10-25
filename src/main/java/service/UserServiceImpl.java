@@ -8,9 +8,7 @@ import exception.UserLoginAlreadyExistException;
 import exception.UserShortLengthLoginException;
 import exception.UserShortLengthPasswordException;
 import validator.UserValidator;
-import java.io.IOException;
 import java.util.List;
-
 
 public class UserServiceImpl implements UserService
 {
@@ -90,21 +88,28 @@ public class UserServiceImpl implements UserService
 
         for(User user : users)
         {
-            if(user.getLogin().equals(login))
-                return user;
+             if(user.getLogin().equals(login))
+                 return user;
         }
 
         return null;
     }
 
     @Override
-    public boolean isCorrectLoginAndPassowrd(String login, String password)
+    public boolean isCorrectLoginAndPassword(String login, String password)
     {
-        User user = getUserByLogin(login);
+        try
+        {
+            User user = getUserByLogin(login);
 
-        if(user.getLogin().equals(login) && user.getPassword().equals(password))
-            return true;
-        else
-            return false;
+            if(user.getLogin().equals(login) && user.getPassword().equals(password))
+                return true;
+
+        }catch (NullPointerException e)
+        {
+            e.getMessage();
+        }
+
+        return false;
     }
 }

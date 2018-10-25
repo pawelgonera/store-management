@@ -8,8 +8,6 @@ import entity.enums.Material;
 import entity.enums.ProductSeparators;
 import entity.enums.SkinType;
 
-import java.util.Arrays;
-
 import static entity.parser.ColorParser.getColor;
 import static entity.parser.MaterialParser.getMaterial;
 import static entity.parser.SkinTypeParser.getSkinType;
@@ -62,7 +60,6 @@ public class ProductParser
     {
         String[] productInfos = strProduct.split(SEPARATOR);
 
-
         Long id = Long.parseLong(productInfos[1]);
         String productName = productInfos[2];
         Float price = Float.parseFloat(productInfos[3]);
@@ -91,8 +88,6 @@ public class ProductParser
         Integer size = Integer.parseInt(productInfos[7]);
         String skinType = productInfos[9];
         SkinType skinTypes = getSkinType(skinType);
-
-        //System.out.println(strProduct);
 
         return new Boots(id, productName, price, weight, colors, productCount, size, skinTypes);
     }
