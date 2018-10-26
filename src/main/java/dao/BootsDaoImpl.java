@@ -1,8 +1,9 @@
-package api;
+package dao;
 
+import api.BootsDao;
 import entity.Boots;
-import entity.Cloth;
 import entity.parser.ProductParser;
+import service.BootsServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,6 +20,7 @@ public class BootsDaoImpl implements BootsDao
     private static final String user = "root";
     private static String pswd;
     private String fileName = ".idea/pswd_data/pswd.bin";
+    private BootsServiceImpl bootsService = BootsServiceImpl.getInstance();
 
     private static BootsDaoImpl instance = null;
 
@@ -108,13 +110,14 @@ public class BootsDaoImpl implements BootsDao
     public void deleteBootsByName(String bootsName)
     {
         PreparedStatement statement;
-        //Long productId =
+        Boots boot = bootsService.getBootsByName(bootsName);
+        Long productId = boot.getProduct().getId();
         try
         {
-            String query = "DELETE FROM " + tableName + "WHERE name =  ?";
+            String query = "DELETE FROM " + tableName + "WHERE product_id =  ?";
             statement = connection.prepareStatement(query);
 
-            // statement.setLong(1, clothName);
+            statement.setLong(1, productId);
 
             statement.execute();
             statement.close();

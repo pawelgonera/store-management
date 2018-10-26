@@ -1,8 +1,6 @@
 package dao;
 
 import api.ProductDao;
-import entity.Boots;
-import entity.Cloth;
 import entity.Product;
 import entity.parser.ProductParser;
 
