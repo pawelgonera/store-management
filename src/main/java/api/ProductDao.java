@@ -13,4 +13,6 @@ public interface ProductDao
 
     List<Product> getAllProducts();
 
+    Product getProductById(Long productId);
+
 }

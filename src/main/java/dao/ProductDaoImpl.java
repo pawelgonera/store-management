@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class ProductDaoImpl implements ProductDao {
+public class ProductDaoImpl implements ProductDao
+{
     private Connection connection;
     private static final String databaseName = "store_project";
     private static final String tableName = "products";
@@ -43,7 +44,8 @@ public class ProductDaoImpl implements ProductDao {
         }
     }
 
-    public ProductDaoImpl() {
+    public ProductDaoImpl()
+    {
         getPass();
         init();
     }
@@ -56,12 +58,13 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public void createProduct(Product product) {
+    public void createProduct(Product product)
+    {
         PreparedStatement statement;
         try {
             char productType = product.toString().charAt(0);
 
-            String query = "INSERT INTO " + tableName + " (productType, productName, price, weight, color, productCount, size, material, skinType) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO " + tableName + " (productName, price, weight, color, productCount) VALUES(?, ?, ?, ?, ?)";
             statement = connection.prepareStatement(query);
 
             statement.setString(1, productType + "");
@@ -70,22 +73,6 @@ public class ProductDaoImpl implements ProductDao {
             statement.setFloat(4, product.getWeight());
             statement.setString(5, product.getColor().name());
             statement.setInt(6, product.getProductCount());
-
-            if (productType == 'C') {
-                statement.setInt(7, ((Cloth) product).getSize());
-                statement.setString(8, ((Cloth) product).getMaterial().name().toUpperCase());
-            } else {
-                statement.setInt(7, 0);
-                statement.setString(8, " ");
-            }
-
-            if (productType == 'B') {
-                statement.setInt(7, ((Boots) product).getSize());
-                statement.setString(9, ((Boots) product).isNaturalSkin().name().toUpperCase());
-            } else {
-                statement.setInt(7, 0);
-                statement.setString(9, " ");
-            }
 
             statement.execute();
             statement.close();
@@ -129,6 +116,41 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
+    public Product getProductById(Long productId)
+    {
+        Statement statement;
+        Product product = null;
+        try
+        {
+            String query = "SELECT * FROM " + tableName + " WHERE id = ?";
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columns = metaData.getColumnCount();
+
+            while (resultSet.next())
+            {
+                Vector row = new Vector(columns);
+                for (int i = 1; i <= columns; i++)
+                {
+                    row.addElement(resultSet.getObject(i));
+                }
+
+                product = ProductParser.parseProduct(row);
+            }
+
+            statement.close();
+
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return product;
+    }
+
+    @Override
     public List<Product> getAllProducts()
     {
         List<Product> products = new ArrayList<Product>();
@@ -150,7 +172,7 @@ public class ProductDaoImpl implements ProductDao {
                     row.addElement(resultSet.getObject(i));
                 }
 
-                Product product = ProductParser.convertProduct(row);
+                Product product = ProductParser.parseProduct(row);
 
                 products.add(product);
             }

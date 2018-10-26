@@ -1,11 +1,11 @@
 package entity.parser;
 
+import dao.ProductDaoImpl;
 import entity.Boots;
 import entity.Cloth;
 import entity.Product;
 import entity.enums.Colors;
 import entity.enums.Material;
-import entity.enums.ProductSeparators;
 import entity.enums.SkinType;
 
 import java.util.Vector;
@@ -14,34 +14,11 @@ import static entity.parser.ColorParser.getColor;
 import static entity.parser.MaterialParser.getMaterial;
 import static entity.parser.SkinTypeParser.getSkinType;
 
-
 public class ProductParser
 {
-    private static final String PRODUCT_ID = ProductSeparators.PRODUCT_ID.getSeparator();
-    private static final String CLOTH_ID = ProductSeparators.CLOTH_ID.getSeparator();
-    private static final String BOOTS_ID = ProductSeparators.BOOTS_ID.getSeparator();
+    private static ProductDaoImpl productDao = ProductDaoImpl.getInstance();
 
-    public static Product convertProduct(Vector strProduct)
-    {
-        String productType = strProduct.firstElement().toString();
-
-        if(productType.equals(PRODUCT_ID))
-        {
-            return parseProduct(strProduct);
-        }
-        else if(productType.equals(CLOTH_ID))
-        {
-            return parseCloth(strProduct);
-        }
-        else if(productType.equals(BOOTS_ID))
-        {
-            return parseBoots(strProduct);
-        }
-
-        return null;
-    }
-
-    private static Product parseProduct(Vector strProduct)
+    public static Product parseProduct(Vector strProduct)
     {
         Object[] productInfos = strProduct.toArray();
 
@@ -56,40 +33,34 @@ public class ProductParser
         return new Product(id, productName, price, weight, colors, productCount);
     }
 
-    private static Product parseCloth(Vector strProduct)
+    public static Cloth parseCloth(Vector strProduct)
     {
         Object[] productInfos = strProduct.toArray();
 
-        Long id = Long.parseLong(productInfos[1].toString());
-        String productName = (String) productInfos[2];
-        Float price = Float.parseFloat(productInfos[3].toString());
-        Float weight = Float.parseFloat(productInfos[4].toString());
-        String color = (String) productInfos[5];
-        Colors colors = getColor(color);
-        Integer productCount = Integer.parseInt(productInfos[6].toString());
-        Integer size = Integer.parseInt(productInfos[7].toString());
-        String material = (String) productInfos[8];
+        Long id = Long.parseLong(productInfos[0].toString());
+        Integer size = Integer.parseInt(productInfos[1].toString());
+        String material = (String) productInfos[2];
         Material materials = getMaterial(material);
+        Long productId = Long.parseLong(productInfos[3].toString());
 
-        return new Cloth(id, productName, price, weight, colors, productCount, size, materials);
+        Product product = productDao.getProductById(productId);
+
+        return new Cloth(id, product, size, materials);
     }
 
-    private static Product parseBoots(Vector strProduct)
+    public static Boots parseBoots(Vector strProduct)
     {
         Object[] productInfos = strProduct.toArray();
 
-        Long id = Long.parseLong(productInfos[1].toString());
-        String productName = (String) productInfos[2];
-        Float price = Float.parseFloat(productInfos[3].toString());
-        Float weight = Float.parseFloat(productInfos[4].toString());
-        String color = (String) productInfos[5];
-        Colors colors = getColor(color);
-        Integer productCount = Integer.parseInt(productInfos[6].toString());
-        Integer size = Integer.parseInt(productInfos[7].toString());
-        String skinType = (String) productInfos[9];
+        Long id = Long.parseLong(productInfos[0].toString());
+        Integer size = Integer.parseInt(productInfos[1].toString());
+        String skinType = (String) productInfos[2];
         SkinType skinTypes = getSkinType(skinType);
+        Long productId = Long.parseLong(productInfos[3].toString());
 
-        return new Boots(id, productName, price, weight, colors, productCount, size, skinTypes);
+        Product product = productDao.getProductById(productId);
+
+        return new Boots(id, product, size, skinTypes);
     }
 
 }
