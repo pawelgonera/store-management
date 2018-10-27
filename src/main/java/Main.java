@@ -9,38 +9,41 @@ import entity.enums.SkinType;
 import entity.parser.ColorParser;
 import entity.parser.MaterialParser;
 import entity.parser.SkinTypeParser;
-import service.ProductFacadeImpl;
-import service.UserRegisterLoginFacadeImpl;
-import service.UserServiceImpl;
+import service.*;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class Main
 {
     private static Scanner sc = new Scanner(System.in);
-    private static int choose = 0, productCount, size;
+    private static int choose = 0, productCount, size, productId;
     private static String login, password, productName;
     private static Colors colors;
     private static Material materials;
     private static String skinType, material;
     private static float price, weight;
-    private static long userId = 0, productId = 0;
+    private static long userId = 0;
     private static UserServiceImpl userService;
     private static ProductFacadeImpl productFacade;
     private static UserRegisterLoginFacadeImpl userRegister;
+    private static ClothServiceImpl clothService;
+    private static BootsServiceImpl bootsService;
 
     static
     {
         userService = UserServiceImpl.getInstance();
-        productFacade = ProductFacadeImpl.getInstance();
         userRegister = UserRegisterLoginFacadeImpl.getInstance();
+        productFacade = ProductFacadeImpl.getInstance();
+        clothService = ClothServiceImpl.getInstance();
+        bootsService = BootsServiceImpl.getInstance();
     }
 
     public static void main(String [] args)
     {
-        List<Product> products = productFacade.getAllProducts();
+        //List<Product> products = productFacade.getAllProducts();
 
-        System.out.println(products);
+       // System.out.println(products);
 
         do
         {
@@ -121,10 +124,17 @@ public class Main
 
     public static void displayAllProducts()
     {
-        List<Product> products = productFacade.getAllProducts();
-        for(Product product : products)
+        List<Cloth> cloths = clothService.getAllCloths();
+        List<Boots> boots = bootsService.getAllBoots();
+
+        for(Cloth cloth : cloths)
         {
-            System.out.println(product);
+            System.out.println(cloth);
+        }
+
+        for(Boots boot: boots)
+        {
+            System.out.println(boot);
         }
     }
 
@@ -134,60 +144,46 @@ public class Main
         {
             System.out.println("1 - Dodaj buty");
             System.out.println("2 - Dodaj ubrania");
-            System.out.println("3 - Inne");
-
-            List<Product> products = productFacade.getAllProducts();
+            System.out.println("3 - Wróć");
+            System.out.println("0 - Wyloguj się");
             choose = sc.nextInt();
+
+            Product product;
 
             switch (choose)
             {
                 case 1:
-                    Main.getProductData();
+                    product = Main.getProductData();
                     System.out.println("Podaj rozmiar butów");
                     size = sc.nextInt();
                     System.out.println("Podaj rodzaj materiału (Skóra czy tworzywo sztuczne, wybierz: NATURAL or ARTIFICIAL)");
                     skinType = sc.next();
                     SkinType skinTypes = SkinTypeParser.getSkinType(skinType);
 
-                    Boots boots = new Boots(productName, price, weight, colors, productCount, size, skinTypes);
-                    productFacade.createProduct(boots);
+                    Boots boots = new Boots(product, size, skinTypes);
+                    productFacade.createProduct(product);
+                    bootsService.saveBoots(boots);
                     break;
                 case 2:
-                    Main.getProductData();
+                    product = Main.getProductData();
                     System.out.println("Podaj rozmiar ubrania (w cyfrach)");
                     size = sc.nextInt();
                     System.out.println("Podaj rodzaj materiału (możliwe do wyboru to: LEATHER, FUR, COTTON, WOOL, POLYESTERS)");
                     material = sc.next();
                     materials = MaterialParser.getMaterial(material);
 
-                    if(!products.isEmpty())
-                    {
-                        productId = products.size();
-                    }
-
-                    productId++;
-
-                    Cloth cloth = new Cloth(productName, price, weight, colors, productCount, size, materials);
-                    productFacade.createProduct(cloth);
+                    Cloth cloth = new Cloth(product, size, materials);
+                    productFacade.createProduct(product);
+                    clothService.saveCloth(cloth);
                     break;
                 case 3:
-                    Main.getProductData();
-
-                    if(!products.isEmpty())
-                    {
-                        productId = products.size();
-                    }
-
-                    productId++;
-
-                    Product product = new Product(productName, price, weight, colors, productCount);
-                    productFacade.createProduct(product);
+                    Main.loggedMenu();
                     break;
             }
         }
     }
 
-    public static void getProductData()
+    public static Product getProductData()
     {
         System.out.println("Podaj nazwę produktu");
         productName = sc.next();
@@ -201,5 +197,16 @@ public class Main
         colors = ColorParser.getColor(color);
         System.out.println("Podaj ilość produktów");
         productCount = sc.nextInt();
+
+        List<Product> products = productFacade.getAllProducts();
+
+        if(!products.isEmpty())
+        {
+            productId = products.size();
+        }
+
+        productId++;
+
+        return new Product(productId, productName, price, weight, colors, productCount);
     }
 }

@@ -2,6 +2,7 @@ package dao;
 
 import api.BootsDao;
 import entity.Boots;
+import entity.Cloth;
 import entity.parser.ProductParser;
 import service.BootsServiceImpl;
 
@@ -16,11 +17,10 @@ public class BootsDaoImpl implements BootsDao
 {
     private Connection connection;
     private static final String databaseName = "store_project";
-    private static final String tableName = "cloths";
+    private static final String tableName = "boots";
     private static final String user = "root";
     private static String pswd;
     private String fileName = ".idea/pswd_data/pswd.bin";
-    private BootsServiceImpl bootsService = BootsServiceImpl.getInstance();
 
     private static BootsDaoImpl instance = null;
 
@@ -70,14 +70,14 @@ public class BootsDaoImpl implements BootsDao
         PreparedStatement statement;
         try
         {
-            Long productId = boots.getProduct().getId();
+            Integer productId = boots.getProduct().getId();
 
             String query = "INSERT INTO " + tableName + " (size, material, product_id) VALUES(?, ?, ?)";
             statement = connection.prepareStatement(query);
 
             statement.setInt(1, boots.getSize());
             statement.setString(2, boots.isNaturalSkin().name());
-            statement.setLong(2, productId);
+            statement.setInt(3, productId);
 
             statement.execute();
             statement.close();
@@ -110,14 +110,14 @@ public class BootsDaoImpl implements BootsDao
     public void deleteBootsByName(String bootsName)
     {
         PreparedStatement statement;
-        Boots boot = bootsService.getBootsByName(bootsName);
-        Long productId = boot.getProduct().getId();
+        Boots boot = getBootsByName(bootsName);
+        Integer productId = boot.getProduct().getId();
         try
         {
             String query = "DELETE FROM " + tableName + "WHERE product_id =  ?";
             statement = connection.prepareStatement(query);
 
-            statement.setLong(1, productId);
+            statement.setInt(1, productId);
 
             statement.execute();
             statement.close();
@@ -126,6 +126,22 @@ public class BootsDaoImpl implements BootsDao
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Boots getBootsByName(String bootsName)
+    {
+        List<Boots> boots = getAllBoots();
+
+        for(Boots boot: boots)
+        {
+            if(boot.getProduct().getProductName().equals(bootsName))
+            {
+                return boot;
+            }
+        }
+
+        return null;
     }
 
     @Override

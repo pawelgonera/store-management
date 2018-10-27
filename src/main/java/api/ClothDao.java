@@ -12,5 +12,7 @@ public interface ClothDao
 
     void deleteClothByName(String clothName);
 
+    Cloth getClothByName(String clothName);
+
     List<Cloth> getAllCloths();
 }

@@ -5,7 +5,7 @@ import entity.enums.ProductSeparators;
 
 public class Product
 {
-    private long id;
+    private int id;
     private String productName;
     private float price;
     private float weight;
@@ -21,7 +21,7 @@ public class Product
         this.productCount = productCount;
     }
 
-    public Product(long id, String productName, float price, float weight, Colors color, int productCount)
+    public Product(int id, String productName, float price, float weight, Colors color, int productCount)
     {
         this.id = id;
         this.productName = productName;
@@ -31,7 +31,7 @@ public class Product
         this.productCount = productCount;
     }
 
-    public long getId()
+    public int getId()
     {
         return id;
     }

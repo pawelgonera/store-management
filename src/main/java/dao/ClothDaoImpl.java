@@ -1,11 +1,8 @@
 package dao;
 
 import api.ClothDao;
-import api.ClothService;
-import entity.Boots;
 import entity.Cloth;
 import entity.parser.ProductParser;
-import service.ClothServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,8 +19,6 @@ public class ClothDaoImpl implements ClothDao
     private static final String user = "root";
     private static String pswd;
     private String fileName = ".idea/pswd_data/pswd.bin";
-
-    private ClothServiceImpl clothService = ClothServiceImpl.getInstance();
 
     private static ClothDaoImpl instance = null;
 
@@ -73,14 +68,14 @@ public class ClothDaoImpl implements ClothDao
         PreparedStatement statement;
         try
         {
-            Long productId = cloth.getProduct().getId();
+            Integer productId = cloth.getProduct().getId();
 
             String query = "INSERT INTO " + tableName + " (size, material, product_id) VALUES(?, ?, ?)";
             statement = connection.prepareStatement(query);
 
             statement.setInt(1, cloth.getSize());
             statement.setString(2, cloth.getMaterial().name());
-            statement.setLong(2, productId);
+            statement.setInt(3, productId);
 
             statement.execute();
             statement.close();
@@ -113,14 +108,14 @@ public class ClothDaoImpl implements ClothDao
     public void deleteClothByName(String clothName)
     {
         PreparedStatement statement;
-        Cloth cloth = clothService.getClothByName(clothName);
-        Long productId = cloth.getProduct().getId();
+        Cloth cloth = getClothByName(clothName);
+        Integer productId = cloth.getProduct().getId();
         try
         {
             String query = "DELETE FROM " + tableName + "WHERE product_id =  ?";
             statement = connection.prepareStatement(query);
 
-            statement.setLong(1, productId);
+            statement.setInt(1, productId);
 
             statement.execute();
             statement.close();
@@ -129,6 +124,22 @@ public class ClothDaoImpl implements ClothDao
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Cloth getClothByName(String clothName)
+    {
+        List<Cloth> cloths = getAllCloths();
+
+        for(Cloth cloth : cloths)
+        {
+            if(cloth.getProduct().getProductName().equals(clothName))
+            {
+                return cloth;
+            }
+        }
+
+        return null;
     }
 
     @Override

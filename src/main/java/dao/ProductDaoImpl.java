@@ -59,28 +59,28 @@ public class ProductDaoImpl implements ProductDao
     public void createProduct(Product product)
     {
         PreparedStatement statement;
-        try {
-            char productType = product.toString().charAt(0);
-
+        try
+        {
             String query = "INSERT INTO " + tableName + " (productName, price, weight, color, productCount) VALUES(?, ?, ?, ?, ?)";
             statement = connection.prepareStatement(query);
 
-            statement.setString(1, productType + "");
-            statement.setString(2, product.getProductName());
-            statement.setFloat(3, product.getPrice());
-            statement.setFloat(4, product.getWeight());
-            statement.setString(5, product.getColor().name());
-            statement.setInt(6, product.getProductCount());
+            statement.setString(1, product.getProductName());
+            statement.setFloat(2, product.getPrice());
+            statement.setFloat(3, product.getWeight());
+            statement.setString(4, product.getColor().name());
+            statement.setInt(5, product.getProductCount());
 
             statement.execute();
             statement.close();
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void deleteProductById(Long productId) {
+    public void deleteProductById(Long productId)
+    {
         PreparedStatement statement;
         try {
             String query = "DELETE FROM " + tableName + " WHERE id = ?";

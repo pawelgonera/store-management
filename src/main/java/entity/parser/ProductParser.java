@@ -22,7 +22,7 @@ public class ProductParser
     {
         Object[] productInfos = strProduct.toArray();
 
-        Long id = Long.parseLong(productInfos[1].toString());
+        Integer id = Integer.parseInt(productInfos[1].toString());
         String productName = (String) productInfos[2];
         Float price = Float.parseFloat(productInfos[3].toString());
         Float weight = Float.parseFloat(productInfos[4].toString());

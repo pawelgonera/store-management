@@ -11,5 +11,7 @@ public interface BootsDao
 
     void deleteBootsByName(String bootsName);
 
+    Boots getBootsByName(String bootsName);
+
     List<Boots> getAllBoots();
 }
