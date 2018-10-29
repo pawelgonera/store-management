@@ -90,7 +90,7 @@ public class ClothDaoImpl implements ClothDao
         PreparedStatement statement;
         try
         {
-            String query = "DELETE FROM " + tableName + "WHERE id =  ?";
+            String query = "DELETE FROM " + tableName + " WHERE id =  ?";
             statement = connection.prepareStatement(query);
 
             statement.setLong(1, clothId);
@@ -105,14 +105,12 @@ public class ClothDaoImpl implements ClothDao
     }
 
     @Override
-    public void deleteClothByName(String clothName)
+    public void deleteClothByProductId(Integer productId)
     {
         PreparedStatement statement;
-        Cloth cloth = getClothByName(clothName);
-        Integer productId = cloth.getProduct().getId();
         try
         {
-            String query = "DELETE FROM " + tableName + "WHERE product_id =  ?";
+            String query = "DELETE FROM " + tableName + " WHERE product_id = ?";
             statement = connection.prepareStatement(query);
 
             statement.setInt(1, productId);

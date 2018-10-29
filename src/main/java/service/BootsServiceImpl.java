@@ -3,6 +3,8 @@ package service;
 import dao.BootsDaoImpl;
 import api.BootsService;
 import entity.Boots;
+import exception.BootsSkinTypeValidFormatException;
+import validator.BootsValidator;
 
 import java.util.List;
 
@@ -10,7 +12,7 @@ public class BootsServiceImpl implements BootsService
 {
     private static BootsServiceImpl instance = null;
     private BootsDaoImpl bootsDao = BootsDaoImpl.getInstance();
-
+    private BootsValidator bootsValidator = BootsValidator.getInstance();
 
     public BootsServiceImpl()
     {
@@ -68,7 +70,7 @@ public class BootsServiceImpl implements BootsService
     }
 
     @Override
-    public boolean isBootsExist(Long id)
+    public boolean isBootsExist(Integer id)
     {
         Boots boot;
         boot = getBootsById(id);
@@ -80,15 +82,19 @@ public class BootsServiceImpl implements BootsService
     }
 
     @Override
-    public boolean saveBoots(Boots boot)
+    public boolean saveBoots(Boots boot) throws BootsSkinTypeValidFormatException
     {
-        bootsDao.createBoots(boot);
+        if(bootsValidator.isValidate(boot))
+        {
+            bootsDao.createBoots(boot);
+            return true;
+        }
 
-        return  true;
+        return  false;
     }
 
     @Override
-    public Boots getBootsById(Long bootstId)
+    public Boots getBootsById(Integer bootstId)
     {
         List<Boots> boots = getAllBoots();
 
@@ -116,8 +122,8 @@ public class BootsServiceImpl implements BootsService
     }
 
     @Override
-    public void removeBoots(String bootsName)
+    public void removeBoots(Integer productId)
     {
-        bootsDao.deleteBootsByName(bootsName);
+        bootsDao.deleteBootsByProductId(productId);
     }
 }

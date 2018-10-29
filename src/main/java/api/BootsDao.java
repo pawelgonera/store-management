@@ -9,9 +9,7 @@ public interface BootsDao
 
     void deleteBootsById(Long bootsId);
 
-    void deleteBootsByName(String bootsName);
-
-    Boots getBootsByName(String bootsName);
+    void deleteBootsByProductId(Integer productId);
 
     List<Boots> getAllBoots();
 }

@@ -2,6 +2,7 @@ package api;
 
 import entity.Boots;
 import entity.Cloth;
+import exception.BootsSkinTypeValidFormatException;
 
 import java.util.List;
 
@@ -15,13 +16,13 @@ public interface BootsService
 
     boolean isBootsExist(String bootsName);
 
-    boolean isBootsExist(Long bootsId);
+    boolean isBootsExist(Integer bootsId);
 
-    boolean saveBoots(Boots boots);
+    boolean saveBoots(Boots boots) throws BootsSkinTypeValidFormatException;
 
-    Boots getBootsById(Long bootsId);
+    Boots getBootsById(Integer bootsId);
 
     Boots getBootsByName(String bootsName);
 
-    void removeBoots(String bootsName);
+    void removeBoots(Integer productId);
 }

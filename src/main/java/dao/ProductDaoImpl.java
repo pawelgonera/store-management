@@ -1,6 +1,7 @@
 package dao;
 
 import api.ProductDao;
+import entity.Cloth;
 import entity.Product;
 import entity.parser.ProductParser;
 
@@ -97,9 +98,11 @@ public class ProductDaoImpl implements ProductDao
     }
 
     @Override
-    public void deleteProductByName(String productName) {
+    public void deleteProductByName(String productName)
+    {
         PreparedStatement statement;
-        try {
+        try
+        {
             String query = "DELETE FROM " + tableName + " WHERE productName = ?";
             statement = connection.prepareStatement(query);
 
@@ -108,7 +111,8 @@ public class ProductDaoImpl implements ProductDao
             statement.execute();
             statement.close();
 
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             e.printStackTrace();
         }
     }
@@ -120,23 +124,20 @@ public class ProductDaoImpl implements ProductDao
         Product product = null;
         try
         {
-            String query = "SELECT * FROM " + tableName + " WHERE id = ?";
+            String query = "SELECT * FROM " + tableName + " WHERE id = " + productId;
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columns = metaData.getColumnCount();
 
-            while (resultSet.next())
+            Vector row = new Vector(columns);
+            for (int i = 1; i <= columns; i++)
             {
-                Vector row = new Vector(columns);
-                for (int i = 1; i <= columns; i++)
-                {
-                    row.addElement(resultSet.getObject(i));
-                }
-
-                product = ProductParser.parseProduct(row);
+                row.addElement(resultSet.getObject(i));
             }
+
+            product = ProductParser.parseProduct(row);
 
             statement.close();
 

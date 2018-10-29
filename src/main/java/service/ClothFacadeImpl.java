@@ -1,33 +1,56 @@
 package service;
 
 import api.ClothFacade;
-import dao.ClothDaoImpl;
 import entity.Cloth;
-
+import exception.ClothMaterialValidFormatException;
+import java.util.Collections;
 import java.util.List;
 
 public class ClothFacadeImpl implements ClothFacade
 {
+    ClothServiceImpl clothService = ClothServiceImpl.getInstance();
 
-    private ClothDaoImpl clothDao = ClothDaoImpl.getInstance();
+    private static ClothFacadeImpl instance = null;
+
+    public ClothFacadeImpl()
+    {
+
+    }
+
+    public static ClothFacadeImpl getInstance()
+    {
+        if(instance == null)
+            instance = new ClothFacadeImpl();
+
+        return instance;
+    }
 
     @Override
     public String createCloth(Cloth cloth)
     {
-        clothDao.createCloth(cloth);
+        try
+        {
+            clothService.saveCloth(cloth);
+        }catch (ClothMaterialValidFormatException e)
+        {
+            e.printStackTrace();
+            return e.getMessage();
+        }
 
-        return null;
-    }
-
-    @Override
-    public String removeCloth(String clothName)
-    {
-        return null;
+        return cloth.getProduct().getProductName() + " zosta(ł/a) poprawnie stworzon(y/a)";
     }
 
     @Override
     public List<Cloth> getAllCloths()
     {
-        return null;
+        try
+        {
+            return clothService.getAllCloths();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Collections.emptyList();
     }
 }

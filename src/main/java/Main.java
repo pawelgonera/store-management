@@ -21,7 +21,8 @@ public class Main
     private static String login, password, productName;
     private static Colors colors;
     private static Material materials;
-    private static String skinType, material;
+    private static SkinType skinTypes;
+    private static String color, skinType, material;
     private static float price, weight;
     private static long userId = 0;
     private static UserServiceImpl userService;
@@ -29,6 +30,8 @@ public class Main
     private static UserRegisterLoginFacadeImpl userRegister;
     private static ClothServiceImpl clothService;
     private static BootsServiceImpl bootsService;
+    private static ClothFacadeImpl clothFacade;
+    private static BootsFacadeImpl bootsFacade;
 
     static
     {
@@ -37,14 +40,12 @@ public class Main
         productFacade = ProductFacadeImpl.getInstance();
         clothService = ClothServiceImpl.getInstance();
         bootsService = BootsServiceImpl.getInstance();
+        clothFacade = ClothFacadeImpl.getInstance();
+        bootsFacade = BootsFacadeImpl.getInstance();
     }
 
     public static void main(String [] args)
     {
-        //List<Product> products = productFacade.getAllProducts();
-
-       // System.out.println(products);
-
         do
         {
             System.out.println("Store Management Menu");
@@ -158,11 +159,17 @@ public class Main
                     size = sc.nextInt();
                     System.out.println("Podaj rodzaj materiału (Skóra czy tworzywo sztuczne, wybierz: NATURAL or ARTIFICIAL)");
                     skinType = sc.next();
-                    SkinType skinTypes = SkinTypeParser.getSkinType(skinType);
+                    skinTypes = SkinTypeParser.getSkinType(skinType.toUpperCase());
 
                     Boots boots = new Boots(product, size, skinTypes);
-                    productFacade.createProduct(product);
-                    bootsService.saveBoots(boots);
+                    try
+                    {
+                        productFacade.createProduct(product);
+                        bootsFacade.createBoots(boots);
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                     break;
                 case 2:
                     product = Main.getProductData();
@@ -170,11 +177,18 @@ public class Main
                     size = sc.nextInt();
                     System.out.println("Podaj rodzaj materiału (możliwe do wyboru to: LEATHER, FUR, COTTON, WOOL, POLYESTERS)");
                     material = sc.next();
-                    materials = MaterialParser.getMaterial(material);
+                    materials = MaterialParser.getMaterial(material.toUpperCase());
 
                     Cloth cloth = new Cloth(product, size, materials);
-                    productFacade.createProduct(product);
-                    clothService.saveCloth(cloth);
+                    try
+                    {
+                        productFacade.createProduct(product);
+                        clothFacade.createCloth(cloth);
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
                     break;
                 case 3:
                     Main.loggedMenu();
@@ -193,8 +207,8 @@ public class Main
         System.out.println("Podaj wagę");
         weight = sc.nextFloat();
         System.out.println("Podaj kolor (możliwe do wyboru to: BLACK, WHITE, RED, GREEN, BLUE, YELLOW)");
-        String color = sc.next();
-        colors = ColorParser.getColor(color);
+        color = sc.next();
+        colors = ColorParser.getColor(color.toUpperCase());
         System.out.println("Podaj ilość produktów");
         productCount = sc.nextInt();
 
@@ -202,10 +216,11 @@ public class Main
 
         if(!products.isEmpty())
         {
-            productId = products.size();
+            productId = products.get(products.size() - 1).getId();
         }
 
         productId++;
+        System.out.println(productId);
 
         return new Product(productId, productName, price, weight, colors, productCount);
     }

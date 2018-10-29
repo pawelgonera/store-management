@@ -72,7 +72,7 @@ public class BootsDaoImpl implements BootsDao
         {
             Integer productId = boots.getProduct().getId();
 
-            String query = "INSERT INTO " + tableName + " (size, material, product_id) VALUES(?, ?, ?)";
+            String query = "INSERT INTO " + tableName + " (size, skinType, product_id) VALUES(?, ?, ?)";
             statement = connection.prepareStatement(query);
 
             statement.setInt(1, boots.getSize());
@@ -92,7 +92,7 @@ public class BootsDaoImpl implements BootsDao
         PreparedStatement statement;
         try
         {
-            String query = "DELETE FROM " + tableName + "WHERE id =  ?";
+            String query = "DELETE FROM " + tableName + " WHERE id =  ?";
             statement = connection.prepareStatement(query);
 
             statement.setLong(1, bootsId);
@@ -107,14 +107,12 @@ public class BootsDaoImpl implements BootsDao
     }
 
     @Override
-    public void deleteBootsByName(String bootsName)
+    public void deleteBootsByProductId(Integer productId)
     {
         PreparedStatement statement;
-        Boots boot = getBootsByName(bootsName);
-        Integer productId = boot.getProduct().getId();
         try
         {
-            String query = "DELETE FROM " + tableName + "WHERE product_id =  ?";
+            String query = "DELETE FROM " + tableName + " WHERE product_id =  ?";
             statement = connection.prepareStatement(query);
 
             statement.setInt(1, productId);
@@ -126,22 +124,6 @@ public class BootsDaoImpl implements BootsDao
         {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Boots getBootsByName(String bootsName)
-    {
-        List<Boots> boots = getAllBoots();
-
-        for(Boots boot: boots)
-        {
-            if(boot.getProduct().getProductName().equals(bootsName))
-            {
-                return boot;
-            }
-        }
-
-        return null;
     }
 
     @Override
@@ -161,7 +143,7 @@ public class BootsDaoImpl implements BootsDao
             while (resultSet.next())
             {
                 Vector row = new Vector(columns);
-                for(int i = 0; i <= columns; i++)
+                for(int i = 1; i <= columns; i++)
                 {
                     row.addElement(resultSet.getObject(i));
                 }

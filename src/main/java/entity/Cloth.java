@@ -43,6 +43,11 @@ public class Cloth
     @Override
     public String toString()
     {
-        return this.size + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() + this.material.name();
+        return this.product.toString() + this.id
+                + ProductSeparators.PRODUCT_SEPARATOR.getSeparator()
+                + this.size + ProductSeparators.PRODUCT_SEPARATOR.getSeparator()
+                + this.material.name();
     }
+
+
 }

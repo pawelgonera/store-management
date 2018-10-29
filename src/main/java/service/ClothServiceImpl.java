@@ -3,13 +3,16 @@ package service;
 import api.ClothService;
 import dao.ClothDaoImpl;
 import entity.Cloth;
+import exception.ClothMaterialValidFormatException;
+import validator.ClothValidator;
+
 import java.util.List;
 
 public class ClothServiceImpl implements ClothService
 {
     private static ClothServiceImpl instance = null;
     private ClothDaoImpl clothDao = ClothDaoImpl.getInstance();
-
+    private ClothValidator clothValidator = ClothValidator.getInstance();
 
     public ClothServiceImpl()
     {
@@ -67,7 +70,7 @@ public class ClothServiceImpl implements ClothService
     }
 
     @Override
-    public boolean isClothExist(Long id)
+    public boolean isClothExist(Integer id)
     {
         Cloth cloth;
         cloth = getClothById(id);
@@ -79,15 +82,19 @@ public class ClothServiceImpl implements ClothService
     }
 
     @Override
-    public boolean saveCloth(Cloth cloth)
+    public boolean saveCloth(Cloth cloth) throws ClothMaterialValidFormatException
     {
-        clothDao.createCloth(cloth);
+        if(clothValidator.isValidate(cloth))
+        {
+            clothDao.createCloth(cloth);
+            return true;
+        }
 
-        return  true;
+        return  false;
     }
 
     @Override
-    public Cloth getClothById(Long clothtId)
+    public Cloth getClothById(Integer clothtId)
     {
         List<Cloth> cloths = getAllCloths();
 
@@ -115,8 +122,8 @@ public class ClothServiceImpl implements ClothService
     }
 
     @Override
-    public void removeCloth(String clothName)
+    public void removeCloth(Integer productId)
     {
-        clothDao.deleteClothByName(clothName);
+        clothDao.deleteClothByProductId(productId);
     }
 }

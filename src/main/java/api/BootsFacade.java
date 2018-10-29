@@ -8,7 +8,5 @@ public interface BootsFacade
 {
     String createBoots(Boots boots);
 
-    String removeBoots(String bootsName);
-
     List<Boots> getAllBoots();
 }

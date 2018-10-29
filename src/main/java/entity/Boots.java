@@ -17,8 +17,9 @@ public class Boots
         this.skinType = skinType;
     }
 
-    public Boots(long id,Product product, int size, SkinType skinType)
+    public Boots(long id, Product product, int size, SkinType skinType)
     {
+        this.product = product;
         this.id = id;
         this.size = size;
         this.skinType = skinType;
@@ -43,6 +44,9 @@ public class Boots
     @Override
     public String toString()
     {
-        return this.size + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() + this.skinType.name();
+        return this.product.toString()
+                + this.id + ProductSeparators.PRODUCT_SEPARATOR.getSeparator()
+                + this.size + ProductSeparators.PRODUCT_SEPARATOR.getSeparator()
+                + this.skinType.name();
     }
 }

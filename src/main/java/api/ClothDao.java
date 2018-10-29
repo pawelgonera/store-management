@@ -10,7 +10,7 @@ public interface ClothDao
 
     void deleteClothById(Long clothId);
 
-    void deleteClothByName(String clothName);
+    void deleteClothByProductId(Integer productId);
 
     Cloth getClothByName(String clothName);
 
