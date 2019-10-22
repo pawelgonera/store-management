@@ -5,7 +5,7 @@ import entity.enums.ProductSeparators;
 
 public class Product
 {
-    private long id;
+    private int id;
     private String productName;
     private float price;
     private float weight;
@@ -21,7 +21,7 @@ public class Product
         this.productCount = productCount;
     }
 
-    public Product(long id, String productName, float price, float weight, Colors color, int productCount)
+    public Product(int id, String productName, float price, float weight, Colors color, int productCount)
     {
         this.id = id;
         this.productName = productName;
@@ -31,7 +31,7 @@ public class Product
         this.productCount = productCount;
     }
 
-    public long getId()
+    public int getId()
     {
         return id;
     }
@@ -86,20 +86,14 @@ public class Product
         return hash;
     }
 
-    public String standardToString()
+    @Override
+    public String toString()
     {
-        return  this.id + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
+        return this.id + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
                 this.productName + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
                 this.price + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
                 this.weight + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
                 this.color + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
-                this.productCount;
-    }
-
-    @Override
-    public String toString()
-    {
-        return  ProductSeparators.PRODUCT_ID.getSeparator() + ProductSeparators.PRODUCT_SEPARATOR.getSeparator() +
-                standardToString();
+                this.productCount + ProductSeparators.PRODUCT_SEPARATOR.getSeparator();
     }
 }

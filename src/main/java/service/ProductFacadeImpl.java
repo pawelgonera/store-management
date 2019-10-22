@@ -1,6 +1,8 @@
 package service;
 
 import api.ProductFacade;
+import dao.ClothDaoImpl;
+import entity.Cloth;
 import entity.Product;
 import exception.ProductCountNegativeException;
 import exception.ProductNameEmptyException;
@@ -14,6 +16,8 @@ public class ProductFacadeImpl implements ProductFacade
 {
     private static ProductFacadeImpl instance = null;
     private ProductServiceImpl productService = ProductServiceImpl.getInstance();
+    private ClothServiceImpl clothService = ClothServiceImpl.getInstance();
+    private BootsServiceImpl bootsService = BootsServiceImpl.getInstance();
 
     public ProductFacadeImpl()
     {
@@ -61,7 +65,16 @@ public class ProductFacadeImpl implements ProductFacade
     {
         try
         {
+             Product product = productService.getProductByName(productName);
+             Integer productId = product.getId();
+
+             if(clothService.isClothExist(productId))
+                 clothService.removeCloth(productId);
+             else if(bootsService.isBootsExist(productId))
+                 bootsService.removeBoots(productId);
+
              productService.removeProduct(productName);
+
         }catch (Exception e)
         {
             return e.getMessage();
