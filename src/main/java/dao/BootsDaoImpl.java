@@ -1,10 +1,8 @@
 package dao;
 
 import api.BootsDao;
-import entity.Boots;
-import entity.Cloth;
+import entity.Boots;;
 import entity.parser.ProductParser;
-import service.BootsServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,23 +17,13 @@ public class BootsDaoImpl implements BootsDao
     private static final String databaseName = "store_project";
     private static final String tableName = "boots";
     private static final String user = "root";
-    private static String pswd;
-    private String fileName = ".idea/pswd_data/pswd.bin";
+    private static String pswd = "admin";
 
     private static BootsDaoImpl instance = null;
 
-    private void getPass()
+    public BootsDaoImpl()
     {
-        try
-        {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-
-            pswd = bufferedReader.readLine();
-
-            bufferedReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        init();
     }
 
     private void init()
@@ -47,12 +35,6 @@ public class BootsDaoImpl implements BootsDao
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public BootsDaoImpl()
-    {
-        getPass();
-        init();
     }
 
     public static BootsDaoImpl getInstance()

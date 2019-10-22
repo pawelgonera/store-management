@@ -15,25 +15,13 @@ public class UserDaoImpl implements UserDao
     private static final String databaseName = "store_project";
     private static final String tableName = "users";
     private static final String user = "root";
-    private static final String fileName = ".idea/pswd_data/pswd.bin";
-    private static String pswd;
+    private static String pswd = "admin";
 
     private static UserDaoImpl instance = null;
 
-    private void getPass()
+    public UserDaoImpl()
     {
-        try
-        {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-
-            pswd = bufferedReader.readLine();
-
-            bufferedReader.close();
-
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        init();
     }
 
     private void init()
@@ -47,13 +35,6 @@ public class UserDaoImpl implements UserDao
         {
             System.out.println("Error with connect to MySQL database");
         }
-    }
-
-
-    public UserDaoImpl()
-    {
-        getPass();
-        init();
     }
 
     public static UserDaoImpl getInstance()

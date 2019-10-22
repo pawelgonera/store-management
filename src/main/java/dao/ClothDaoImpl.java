@@ -17,23 +17,13 @@ public class ClothDaoImpl implements ClothDao
     private static final String databaseName = "store_project";
     private static final String tableName = "cloths";
     private static final String user = "root";
-    private static String pswd;
-    private String fileName = ".idea/pswd_data/pswd.bin";
+    private static String pswd = "admin";
 
     private static ClothDaoImpl instance = null;
 
-    private void getPass()
+    public ClothDaoImpl()
     {
-        try
-        {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-
-            pswd = bufferedReader.readLine();
-
-            bufferedReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        init();
     }
 
     private void init()
@@ -45,12 +35,6 @@ public class ClothDaoImpl implements ClothDao
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public ClothDaoImpl()
-    {
-        getPass();
-        init();
     }
 
     public static ClothDaoImpl getInstance()

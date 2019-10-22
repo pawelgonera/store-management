@@ -1,7 +1,6 @@
 package dao;
 
 import api.ProductDao;
-import entity.Cloth;
 import entity.Product;
 import entity.parser.ProductParser;
 
@@ -17,21 +16,13 @@ public class ProductDaoImpl implements ProductDao
     private static final String databaseName = "store_project";
     private static final String tableName = "products";
     private static final String user = "root";
-    private static String pswd;
-    private String fileName = ".idea/pswd_data/pswd.bin";
+    private static String pswd = "admin";
 
     private static ProductDaoImpl instance = null;
 
-    private void getPass() {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-
-            pswd = bufferedReader.readLine();
-
-            bufferedReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public ProductDaoImpl()
+    {
+        init();
     }
 
     private void init() {
@@ -41,12 +32,6 @@ public class ProductDaoImpl implements ProductDao
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public ProductDaoImpl()
-    {
-        getPass();
-        init();
     }
 
     public static ProductDaoImpl getInstance() {
@@ -74,6 +59,32 @@ public class ProductDaoImpl implements ProductDao
             statement.execute();
             statement.close();
         } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateProduct(Product product)
+    {
+        PreparedStatement statement;
+        try
+        {
+            String query = "UPDATE " + tableName + " SET productName = ?, price = ?, weight = ?, color = ?, productCount = ? WHERE id = ?";
+            statement = connection.prepareStatement(query);
+
+            statement.setString(1, product.getProductName());
+            statement.setFloat(2, product.getPrice());
+            statement.setFloat(3, product.getWeight());
+            statement.setString(4, product.getColor().name());
+            statement.setInt(5, product.getProductCount());
+            statement.setInt(6, product.getId());
+
+            statement.execute();
+            statement.close();
+
+
+        }catch (SQLException e)
         {
             e.printStackTrace();
         }
